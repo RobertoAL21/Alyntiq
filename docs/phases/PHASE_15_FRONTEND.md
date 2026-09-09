@@ -1,11 +1,38 @@
 Phase 15 — Frontend Dashboard
 
-Technology
+## Technology
 
-* Next.js
-* React
-* TypeScript
-* Tailwind
+- React
+
+- TypeScript
+
+- Vite
+
+- React Router
+
+- Tailwind CSS
+
+- Lightweight Charts
+
+## Architecture
+
+The Alyntiq frontend will be a standalone React Single Page Application.
+
+Responsibilities:
+
+- React handles the user interface.
+
+- React Router handles client-side routing.
+
+- FastAPI exposes the backend REST API.
+
+- WebSockets provide real-time updates when required.
+
+- The frontend must not contain trading or financial business logic.
+
+- Trading, risk, portfolio and ML logic must remain in the backend.
+
+Next.js must not be introduced unless a future architectural decision explicitly changes the frontend architecture.
 
 Pages
 

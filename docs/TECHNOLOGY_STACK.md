@@ -57,13 +57,25 @@ Capabilities:
 
 Provider-specific code must remain behind abstractions.
 
-Frontend
+## Frontend
 
-* Next.js
-* React
-* TypeScript
-* Tailwind CSS
-* Lightweight Charts or similar financial charting library
+- React
+
+- TypeScript
+
+- Vite
+
+- React Router
+
+- Tailwind CSS
+
+- Lightweight Charts or similar financial charting library
+
+The frontend will be a standalone Single Page Application (SPA).
+
+FastAPI will provide the backend API and React will consume it through HTTP APIs and WebSockets.
+
+Next.js is intentionally not part of the frontend stack.
 
 Infrastructure
 

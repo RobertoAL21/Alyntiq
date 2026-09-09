@@ -281,9 +281,11 @@ Every trade must be explainable.
 
 ⸻
 
-Phase 15 — Frontend Dashboard
+## Phase 15 — Frontend Dashboard
 
-Create a Next.js dashboard.
+Create a React + TypeScript dashboard using Vite.
+
+The frontend will operate as a standalone SPA consuming the FastAPI API and real-time WebSocket events.
 
 Main pages:
 

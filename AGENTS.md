@@ -28,6 +28,17 @@ Core Development Rules
 * Do not create Git commits unless explicitly requested.
 * Update documentation when architecture or behavior changes.
 * Do not make assumptions about financial correctness without validation.
+## Frontend Architecture
+
+The Alyntiq frontend uses:
+
+React + TypeScript + Vite + React Router
+
+Do not introduce Next.js.
+
+FastAPI is the backend and owns all financial, trading, risk, portfolio and ML business logic.
+
+React is responsible for presentation, user interaction and visualization.
 
 Core Architecture Principle
 

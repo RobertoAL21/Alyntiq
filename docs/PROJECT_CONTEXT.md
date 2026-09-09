@@ -108,3 +108,21 @@ The application must not claim guaranteed returns.
 Historical performance does not imply future performance.
 
 Paper trading results are experimental results, not financial advice.
+
+## Frontend Architecture
+
+Alyntiq uses a standalone frontend built with:
+
+- React
+
+- TypeScript
+
+- Vite
+
+- React Router
+
+- Tailwind CSS
+
+The frontend communicates with the FastAPI backend through REST APIs and WebSockets.
+
+Next.js is not part of the current architecture.
