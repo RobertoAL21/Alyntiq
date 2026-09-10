@@ -1,6 +1,6 @@
 # Alyntiq
 
-Alyntiq is a professional AI-powered quantitative research and paper-trading platform. Phase 0 (Project Foundation) is complete; Phase 1 (Historical Market Data) has not yet been implemented.
+Alyntiq is a professional AI-powered quantitative research and paper-trading platform. Phase 0 (Project Foundation) is complete; Phase 1 (Historical Market Data) is in progress.
 
 The intended long-term flow is:
 
@@ -14,7 +14,7 @@ Alyntiq is currently for research, backtesting, and paper trading only. `TRADING
 
 ## Current architecture
 
-The FastAPI application is in `backend/app`. The HTTP layer is isolated in `api/`, runtime settings and JSON structured logging are in `core/`, and SQLAlchemy/Alembic infrastructure is in `db/` and `alembic/`. PostgreSQL and Redis are provisioned with Docker Compose for local development but are not yet used by business logic.
+The FastAPI application is in `backend/app`. The HTTP layer is isolated in `api/`, runtime settings and JSON structured logging are in `core/`, SQLAlchemy/Alembic infrastructure is in `db/` and `alembic/`, and historical market-data ingestion is in `market_data/`. PostgreSQL and Redis are provisioned with Docker Compose for local development.
 
 ## Requirements
 
@@ -65,6 +65,26 @@ Expected response:
 ```json
 {"status":"ok","service":"alyntiq-api"}
 ```
+
+## Historical market-data ingestion
+
+Phase 1 ingests validated, daily historical OHLCV bars from Alpaca. Set
+`ALPACA_API_KEY` and `ALPACA_SECRET_KEY` in your untracked `.env`, then apply the
+migration and run the CLI from `backend`:
+
+```bash
+alembic upgrade head
+python -m scripts.ingest_market_data \
+  --symbol AAPL \
+  --start 2020-01-01 \
+  --end 2026-01-01 \
+  --timeframe 1D
+```
+
+The default feed is `iex`; set `ALPACA_DATA_FEED=sip` only when that feed is
+available to the account. Stored bars record provider/feed/raw-data provenance and
+are idempotent. Potential long gaps are reported for review rather than rejected,
+because Phase 1 does not yet own an exchange calendar.
 
 ## Run with Docker
 

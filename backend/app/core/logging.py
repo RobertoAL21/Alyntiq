@@ -3,6 +3,8 @@ import logging
 from datetime import UTC, datetime
 from typing import Any
 
+_STANDARD_LOG_RECORD_FIELDS = frozenset(logging.makeLogRecord({}).__dict__)
+
 
 class JsonFormatter(logging.Formatter):
     """Render application log records as single-line JSON objects."""
@@ -17,6 +19,14 @@ class JsonFormatter(logging.Formatter):
 
         if record.exc_info:
             payload["exception"] = self.formatException(record.exc_info)
+
+        payload.update(
+            {
+                key: value
+                for key, value in record.__dict__.items()
+                if key not in _STANDARD_LOG_RECORD_FIELDS
+            }
+        )
 
         return json.dumps(payload, default=str)
 

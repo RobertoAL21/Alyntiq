@@ -21,6 +21,8 @@ class Settings(BaseSettings):
     trading_environment: Literal["paper", "live"] = "paper"
     alpaca_api_key: str | None = None
     alpaca_secret_key: str | None = None
+    alpaca_data_url: str = "https://data.alpaca.markets/v2"
+    alpaca_data_feed: Literal["iex", "sip"] = "iex"
 
 
 @lru_cache

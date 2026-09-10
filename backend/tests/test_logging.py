@@ -24,6 +24,24 @@ def test_json_formatter_emits_structured_log_record() -> None:
     assert payload["timestamp"].endswith("+00:00")
 
 
+def test_json_formatter_includes_structured_context() -> None:
+    formatter = JsonFormatter()
+    record = logging.LogRecord(
+        name="alyntiq.market_data",
+        level=logging.INFO,
+        pathname=__file__,
+        lineno=10,
+        msg="historical_market_data_ingested",
+        args=(),
+        exc_info=None,
+    )
+    record.symbol = "AAPL"
+
+    payload = json.loads(formatter.format(record))
+
+    assert payload["symbol"] == "AAPL"
+
+
 def test_configure_logging_uses_json_for_root_handlers() -> None:
     configure_logging()
 

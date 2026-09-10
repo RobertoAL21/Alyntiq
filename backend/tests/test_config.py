@@ -5,6 +5,7 @@ def test_settings_default_to_paper_trading() -> None:
     settings = Settings(_env_file=None)
 
     assert settings.trading_environment == "paper"
+    assert settings.alpaca_data_feed == "iex"
 
 
 def test_settings_read_runtime_environment(monkeypatch) -> None:

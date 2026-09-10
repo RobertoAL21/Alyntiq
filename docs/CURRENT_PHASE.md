@@ -6,7 +6,7 @@ Phase 1 — Historical Market Data
 
 Status
 
-NOT STARTED
+IN PROGRESS
 
 Objective
 
