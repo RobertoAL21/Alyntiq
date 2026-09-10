@@ -1,5 +1,9 @@
 Phase 1 — Historical Market Data
 
+Status
+
+COMPLETE
+
 Objective
 
 Build a reliable historical market data pipeline.

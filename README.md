@@ -1,6 +1,6 @@
 # Alyntiq
 
-Alyntiq is a professional AI-powered quantitative research and paper-trading platform. Phase 0 (Project Foundation) is complete; Phase 1 (Historical Market Data) is in progress.
+Alyntiq is a professional AI-powered quantitative research and paper-trading platform. Phases 0 (Project Foundation) and 1 (Historical Market Data) are complete; Phase 2 (Exploratory Data Analysis) has not yet started.
 
 The intended long-term flow is:
 
