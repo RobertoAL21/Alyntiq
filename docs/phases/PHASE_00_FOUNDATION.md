@@ -1,5 +1,9 @@
 Phase 0 — Project Foundation
 
+Status
+
+COMPLETE
+
 Objective
 
 Create the engineering foundation for Alyntiq.

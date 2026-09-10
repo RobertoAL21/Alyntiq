@@ -1,6 +1,6 @@
 # Alyntiq
 
-Alyntiq is a professional AI-powered quantitative research and paper-trading platform. It is being built incrementally; this repository currently implements **Phase 0: Project Foundation** only.
+Alyntiq is a professional AI-powered quantitative research and paper-trading platform. Phase 0 (Project Foundation) is complete; Phase 1 (Historical Market Data) has not yet been implemented.
 
 The intended long-term flow is:
 
@@ -14,7 +14,7 @@ Alyntiq is currently for research, backtesting, and paper trading only. `TRADING
 
 ## Current architecture
 
-The FastAPI application is in `backend/app`. The HTTP layer is isolated in `api/`, runtime settings and logging are in `core/`, and SQLAlchemy/Alembic infrastructure is in `db/` and `alembic/`. PostgreSQL and Redis are provisioned with Docker Compose for local development but are not yet used by business logic.
+The FastAPI application is in `backend/app`. The HTTP layer is isolated in `api/`, runtime settings and JSON structured logging are in `core/`, and SQLAlchemy/Alembic infrastructure is in `db/` and `alembic/`. PostgreSQL and Redis are provisioned with Docker Compose for local development but are not yet used by business logic.
 
 ## Requirements
 

@@ -2,42 +2,32 @@ Alyntiq — Current Phase
 
 Current Phase
 
-Phase 0 — Project Foundation
+Phase 1 — Historical Market Data
 
 Status
 
-IN PROGRESS
+NOT STARTED
 
 Objective
 
-Establish a production-quality engineering foundation before implementing market data, machine learning, backtesting or trading functionality.
+Build a reliable historical market data pipeline.
 
 Current Phase Document
 
 Read:
 
-docs/phases/PHASE_00_FOUNDATION.md
+docs/phases/PHASE_01_MARKET_DATA.md
 
 Current Scope
 
-* FastAPI
-* configuration
-* PostgreSQL
-* SQLAlchemy
-* Alembic
-* Redis
-* Docker
-* Docker Compose
-* pytest
-* Ruff
-* pre-commit
-* GitHub Actions
-* logging
+* provider abstraction
+* Alpaca historical market data
+* validation
+* idempotent storage
+* ingestion CLI
 
 Explicitly Out of Scope
 
-* market data ingestion
-* Alpaca integration
 * Machine Learning
 * feature engineering
 * backtesting
@@ -48,9 +38,8 @@ Explicitly Out of Scope
 
 Phase Completion
 
-When Phase 0 is complete:
+When Phase 1 is complete:
 
-1. Change status to COMPLETE.
-2. Record relevant architecture decisions.
-3. Change this file to Phase 1.
-4. Do not delete the completed phase documentation.
+1. Change status to COMPLETE and record relevant architecture decisions.
+2. Change this file to Phase 2.
+3. Do not delete the completed phase documentation.
