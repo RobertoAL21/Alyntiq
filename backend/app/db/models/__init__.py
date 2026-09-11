@@ -2,5 +2,6 @@
 
 from app.db.models.market_bar import MarketBar
 from app.db.models.market_feature import MarketFeature
+from app.db.models.market_target import MarketTarget
 
-__all__ = ["MarketBar", "MarketFeature"]
+__all__ = ["MarketBar", "MarketFeature", "MarketTarget"]

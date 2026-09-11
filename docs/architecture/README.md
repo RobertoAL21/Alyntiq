@@ -6,6 +6,7 @@ Implemented documents:
 
 market-data.md
 feature-engineering.md
+target-generation.md
 
 Potential future documents:
 

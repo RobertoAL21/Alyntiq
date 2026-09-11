@@ -2,7 +2,7 @@ Alyntiq — Current Phase
 
 Current Phase
 
-Phase 4 — Prediction Problem
+Phase 5 — Baseline Models
 
 Status
 
@@ -10,24 +10,24 @@ NOT STARTED
 
 Objective
 
-Define explicit, versioned ML targets without contaminating inference features.
+Establish simple model baselines with walk-forward validation and experiment tracking.
 
 Current Phase Document
 
 Read:
 
-docs/phases/PHASE_04_PREDICTION_PROBLEM.md
+docs/phases/PHASE_05_BASELINE_MODELS.md
 
 Current Scope
 
-* next-day binary classification target
-* target generation component
-* target versioning
-* target and inference-feature separation
+* random and majority-class baselines
+* logistic-regression and decision-tree baselines
+* walk-forward validation
+* predictive metrics
+* MLflow experiment tracking
 
 Explicitly Out of Scope
 
-* model training
 * backtesting
 * strategies
 * risk management
@@ -36,8 +36,8 @@ Explicitly Out of Scope
 
 Phase Completion
 
-When Phase 4 is complete:
+When Phase 5 is complete:
 
 1. Change status to COMPLETE and record relevant architecture decisions.
-2. Change this file to Phase 5.
+2. Change this file to Phase 6.
 3. Do not delete the completed phase documentation.
