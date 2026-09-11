@@ -1,0 +1,31 @@
+FEATURE_VERSION_V1 = "features-v1"
+MARKET_CONTEXT_SYMBOLS = frozenset({"SPY", "QQQ"})
+
+FEATURE_COLUMNS = (
+    "returns_1d",
+    "returns_5d",
+    "returns_10d",
+    "returns_20d",
+    "momentum_5",
+    "momentum_10",
+    "momentum_20",
+    "sma_10",
+    "sma_20",
+    "sma_50",
+    "ema_10",
+    "ema_20",
+    "volatility_10",
+    "volatility_20",
+    "atr_14",
+    "rsi_14",
+    "macd",
+    "macd_signal",
+    "bollinger_upper",
+    "bollinger_lower",
+    "volume_change",
+    "volume_ma_20",
+    "volume_ratio",
+    "spy_returns_1d",
+    "qqq_returns_1d",
+    "spy_volatility_20",
+)

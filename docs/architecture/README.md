@@ -2,9 +2,13 @@ Architecture Documentation
 
 Use this directory for deeper technical diagrams and subsystem designs.
 
-Potential files:
+Implemented documents:
 
 market-data.md
+feature-engineering.md
+
+Potential future documents:
+
 feature-pipeline.md
 backtesting-engine.md
 risk-engine.md

@@ -2,7 +2,7 @@ Alyntiq — Current Phase
 
 Current Phase
 
-Phase 3 — Feature Engineering
+Phase 4 — Prediction Problem
 
 Status
 
@@ -10,26 +10,24 @@ NOT STARTED
 
 Objective
 
-Create reproducible ML features without future-information leakage.
+Define explicit, versioned ML targets without contaminating inference features.
 
 Current Phase Document
 
 Read:
 
-docs/phases/PHASE_03_FEATURE_ENGINEERING.md
+docs/phases/PHASE_04_PREDICTION_PROBLEM.md
 
 Current Scope
 
-* returns and momentum features
-* moving-average and volatility features
-* technical and volume features
-* market-context features
-* feature versioning
-* leakage tests
+* next-day binary classification target
+* target generation component
+* target versioning
+* target and inference-feature separation
 
 Explicitly Out of Scope
 
-* Machine Learning
+* model training
 * backtesting
 * strategies
 * risk management
@@ -38,8 +36,8 @@ Explicitly Out of Scope
 
 Phase Completion
 
-When Phase 3 is complete:
+When Phase 4 is complete:
 
 1. Change status to COMPLETE and record relevant architecture decisions.
-2. Change this file to Phase 4.
+2. Change this file to Phase 5.
 3. Do not delete the completed phase documentation.
