@@ -6,6 +6,8 @@ def test_settings_default_to_paper_trading() -> None:
 
     assert settings.trading_environment == "paper"
     assert settings.alpaca_data_feed == "iex"
+    assert settings.mlflow_tracking_uri == "sqlite:///mlruns/mlflow.db"
+    assert settings.mlflow_artifact_uri == "file:./mlruns/artifacts"
 
 
 def test_settings_read_runtime_environment(monkeypatch) -> None:

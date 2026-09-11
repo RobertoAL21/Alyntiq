@@ -7,8 +7,13 @@ services:
         required: false
     environment:
       DATABASE_URL: ${DOCKER_DATABASE_URL:-postgresql+psycopg://alyntiq:alyntiq@postgres:5432/alyntiq}
+      MLFLOW_TRACKING_URI: ${MLFLOW_TRACKING_URI:-sqlite:////app/mlruns/mlflow.db}
+      MLFLOW_ARTIFACT_URI: ${MLFLOW_ARTIFACT_URI:-file:///app/mlruns/artifacts}
+      GIT_PYTHON_REFRESH: quiet
     ports:
       - "8000:8000"
+    volumes:
+      - mlruns_data:/app/mlruns
     depends_on:
       postgres:
         condition: service_healthy
@@ -43,3 +48,4 @@ services:
 
 volumes:
   postgres_data:
+  mlruns_data:

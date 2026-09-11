@@ -1,12 +1,16 @@
 # Alyntiq
 
-Alyntiq is a professional AI-powered quantitative research and paper-trading platform. Phases 0 (Project Foundation), 1 (Historical Market Data), and 2 (Exploratory Data Analysis) are complete; Phase 3 (Feature Engineering) has not yet started.
+Alyntiq is a professional AI-powered quantitative research and paper-trading platform.
+Phases 0 through 5 are complete: foundation, historical market data, exploratory data
+analysis, feature engineering, target generation, and baseline-model evaluation.
 
 The intended long-term flow is:
 
 Market Data → Features → Models → Strategy → Risk → Execution → Portfolio
 
-No market-data ingestion, ML, backtesting, strategy, execution, or trading functionality exists yet.
+Historical market-data ingestion, versioned feature and target generation, and
+walk-forward baseline-model evaluation are available. Backtesting, strategies, risk,
+execution, and trading functionality are not implemented.
 
 ## Safety
 
@@ -14,7 +18,12 @@ Alyntiq is currently for research, backtesting, and paper trading only. `TRADING
 
 ## Current architecture
 
-The FastAPI application is in `backend/app`. The HTTP layer is isolated in `api/`, runtime settings and JSON structured logging are in `core/`, SQLAlchemy/Alembic infrastructure is in `db/` and `alembic/`, and historical market-data ingestion is in `market_data/`. PostgreSQL and Redis are provisioned with Docker Compose for local development.
+The FastAPI application is in `backend/app`. The HTTP layer is isolated in `api/`,
+runtime settings and JSON structured logging are in `core/`, SQLAlchemy/Alembic
+infrastructure is in `db/`, historical market-data ingestion is in `market_data/`,
+point-in-time transformations are in `features/`, labels are in `targets/`, and baseline
+evaluation is in `models/`. PostgreSQL, Redis, and a persistent local MLflow store are
+provisioned with Docker Compose for local development.
 
 ## Requirements
 
@@ -38,7 +47,8 @@ Configure environment variables from the repository root:
 cp .env.example .env
 ```
 
-`ALPACA_API_KEY` and `ALPACA_SECRET_KEY` are intentionally optional in Phase 0. Do not commit `.env`.
+`ALPACA_API_KEY` and `ALPACA_SECRET_KEY` are required only for Alpaca ingestion. Do not
+commit `.env`.
 
 ## Run locally
 
@@ -86,6 +96,33 @@ available to the account. Stored bars record provider/feed/raw-data provenance a
 are idempotent. Potential long gaps are reported for review rather than rejected,
 because Phase 1 does not yet own an exchange calendar.
 
+## Feature, target, and baseline evaluation
+
+After ingesting the selected symbols, including `SPY` and `QQQ`, generate the versioned
+feature and target sets from `backend`:
+
+```bash
+python -m scripts.build_features --source alpaca:iex:raw --timeframe 1D
+python -m scripts.build_targets --source alpaca:iex:raw --timeframe 1D
+```
+
+Evaluate the required baseline classifiers with chronological expanding windows:
+
+```bash
+python -m scripts.run_baselines \
+  --source alpaca:iex:raw \
+  --timeframe 1D \
+  --feature-version features-v1 \
+  --target-version targets-v1 \
+  --dataset-version dataset-v1 \
+  --n-splits 3 \
+  --gap 1
+```
+
+This command records the random, majority-class, logistic-regression, and decision-tree
+results in local MLflow. Its predictive metrics are research outputs, not trading
+performance or financial advice.
+
 ## Run with Docker
 
 After creating `.env`, build and start all services:
@@ -100,7 +137,7 @@ Docker uses `DOCKER_DATABASE_URL` when supplied, otherwise it points the backend
 docker compose down
 ```
 
-To apply the (currently empty) foundation migration in the backend container:
+To apply pending migrations in the backend container:
 
 ```bash
 docker compose exec backend alembic upgrade head
@@ -130,6 +167,9 @@ backend/
     api/routes/        HTTP endpoints
     core/              Settings and logging
     db/                SQLAlchemy engine, sessions, and base
+    features/          Point-in-time feature pipeline
+    targets/           Versioned supervised-learning targets
+    models/            Dataset assembly and baseline experiments
   alembic/             Database migration environment
   tests/               API tests
 docker-compose.yml     Backend, PostgreSQL, and Redis services

@@ -2,7 +2,7 @@ Alyntiq — Current Phase
 
 Current Phase
 
-Phase 5 — Baseline Models
+Phase 6 — Advanced Models
 
 Status
 
@@ -10,21 +10,20 @@ NOT STARTED
 
 Objective
 
-Establish simple model baselines with walk-forward validation and experiment tracking.
+Evaluate advanced tree-based models with disciplined optimization and model comparison.
 
 Current Phase Document
 
 Read:
 
-docs/phases/PHASE_05_BASELINE_MODELS.md
+docs/phases/PHASE_06_ADVANCED_MODELS.md
 
 Current Scope
 
-* random and majority-class baselines
-* logistic-regression and decision-tree baselines
-* walk-forward validation
-* predictive metrics
-* MLflow experiment tracking
+* Random Forest, XGBoost, and LightGBM
+* Optuna hyperparameter optimization
+* feature importance and optional SHAP analysis
+* model leaderboard
 
 Explicitly Out of Scope
 
@@ -36,8 +35,8 @@ Explicitly Out of Scope
 
 Phase Completion
 
-When Phase 5 is complete:
+When Phase 6 is complete:
 
 1. Change status to COMPLETE and record relevant architecture decisions.
-2. Change this file to Phase 6.
+2. Change this file to Phase 7.
 3. Do not delete the completed phase documentation.

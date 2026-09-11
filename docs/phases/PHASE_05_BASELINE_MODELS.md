@@ -1,5 +1,9 @@
 Phase 5 — Baseline Models
 
+Status
+
+COMPLETE
+
 Objective
 
 Establish simple baselines.

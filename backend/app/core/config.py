@@ -23,6 +23,9 @@ class Settings(BaseSettings):
     alpaca_secret_key: str | None = None
     alpaca_data_url: str = "https://data.alpaca.markets/v2"
     alpaca_data_feed: Literal["iex", "sip"] = "iex"
+    mlflow_tracking_uri: str = "sqlite:///mlruns/mlflow.db"
+    mlflow_artifact_uri: str = "file:./mlruns/artifacts"
+    mlflow_experiment_name: str = "alyntiq-baselines"
 
 
 @lru_cache
