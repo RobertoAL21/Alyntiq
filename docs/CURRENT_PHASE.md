@@ -2,7 +2,7 @@ Alyntiq — Current Phase
 
 Current Phase
 
-Phase 2 — Exploratory Data Analysis
+Phase 3 — Feature Engineering
 
 Status
 
@@ -10,28 +10,25 @@ NOT STARTED
 
 Objective
 
-Understand market data before building predictive models.
+Create reproducible ML features without future-information leakage.
 
 Current Phase Document
 
 Read:
 
-docs/phases/PHASE_02_EDA.md
+docs/phases/PHASE_03_FEATURE_ENGINEERING.md
 
 Current Scope
 
-* price distributions
-* returns and log returns
-* rolling volatility
-* volume and drawdowns
-* correlation and autocorrelation analysis
-* moving averages and market-regime exploration
-* documented conclusions and hypotheses
-* EDA notebook and research document
+* returns and momentum features
+* moving-average and volatility features
+* technical and volume features
+* market-context features
+* feature versioning
+* leakage tests
 
 Explicitly Out of Scope
 
-* feature engineering
 * Machine Learning
 * backtesting
 * strategies
@@ -41,8 +38,8 @@ Explicitly Out of Scope
 
 Phase Completion
 
-When Phase 2 is complete:
+When Phase 3 is complete:
 
 1. Change status to COMPLETE and record relevant architecture decisions.
-2. Change this file to Phase 3.
+2. Change this file to Phase 4.
 3. Do not delete the completed phase documentation.

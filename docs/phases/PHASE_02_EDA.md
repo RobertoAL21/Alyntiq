@@ -1,5 +1,9 @@
 Phase 2 — Exploratory Data Analysis
 
+Status
+
+COMPLETE
+
 Objective
 
 Understand market data before building predictive models.
