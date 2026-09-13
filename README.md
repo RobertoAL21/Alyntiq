@@ -1,17 +1,17 @@
 # Alyntiq
 
 Alyntiq is a professional AI-powered quantitative research and paper-trading platform.
-Phases 0 through 7 are complete: foundation, historical market data, exploratory data
+Phases 0 through 8 are complete: foundation, historical market data, exploratory data
 analysis, feature engineering, target generation, baseline-model evaluation, and
-advanced-model evaluation, and the historical backtesting engine.
+advanced-model evaluation, the historical backtesting engine, and baseline strategies.
 
 The intended long-term flow is:
 
 Market Data → Features → Models → Strategy → Risk → Execution → Portfolio
 
 Historical market-data ingestion, versioned feature and target generation, walk-forward
-model evaluation, and a historical backtesting engine are available. Concrete strategies,
-risk, broker execution, and trading functionality are not implemented.
+model evaluation, a historical backtesting engine, and comparable baseline strategies are
+available. Risk, broker execution, and trading functionality are not implemented.
 
 ## Safety
 
@@ -154,10 +154,30 @@ portfolio accounting, closed trades, an equity curve, and historical performance
 A signal observed after a completed bar fills at the next bar's open, with configurable
 commission and directional slippage. This prevents same-bar execution look-ahead.
 
-The engine is intentionally single-symbol and long-only. It has no concrete strategies,
-risk decisions, broker integration, persistence, or paper/live-trading capability. See
-[the backtesting architecture](docs/architecture/backtesting.md) for interfaces, metrics,
-assumptions, and verification commands.
+The engine is intentionally single-symbol and long-only. It has no risk decisions,
+broker integration, persistence, or paper/live-trading capability. See [the backtesting
+architecture](docs/architecture/backtesting.md) for interfaces, metrics, assumptions, and
+verification commands.
+
+## Baseline strategy comparison
+
+Phase 8 adds Buy & Hold, Moving Average Crossover, RSI Mean Reversion, Momentum, and a
+seeded Random strategy. All are run against the same source-qualified daily-bar period,
+fixed quantity, and execution assumptions:
+
+```bash
+docker compose exec backend python -m scripts.run_baseline_strategies \
+  --symbol AAPL \
+  --start 2024-01-02 \
+  --end 2024-12-31 \
+  --quantity 100 \
+  --commission-rate 0.001 \
+  --slippage-bps 5
+```
+
+The command returns return, Sharpe, Sortino, maximum drawdown, and trade-count comparison
+metrics. It is historical research only; it does not create a model-driven, risk-approved,
+or broker-executable trade. See [the baseline strategy architecture](docs/architecture/baseline-strategies.md).
 
 ## Run with Docker
 
@@ -207,6 +227,7 @@ backend/
     targets/           Versioned supervised-learning targets
     models/            Dataset assembly, baseline, and advanced experiments
     backtesting/       Historical simulation and performance metrics
+    strategies/        Baseline trading-decision implementations
   alembic/             Database migration environment
   tests/               API tests
 docker-compose.yml     Backend, PostgreSQL, and Redis services

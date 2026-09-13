@@ -1,5 +1,9 @@
 Phase 8 — Baseline Strategies
 
+Status
+
+COMPLETE
+
 Implement:
 
 * Buy & Hold

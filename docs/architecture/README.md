@@ -10,6 +10,7 @@ target-generation.md
 baseline-models.md
 advanced-models.md
 backtesting.md
+baseline-strategies.md
 
 Potential future documents:
 
