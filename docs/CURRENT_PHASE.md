@@ -2,7 +2,7 @@ Alyntiq — Current Phase
 
 Current Phase
 
-Phase 7 — Backtesting Engine
+Phase 8 — Baseline Strategies
 
 Status
 
@@ -10,33 +10,30 @@ NOT STARTED
 
 Objective
 
-Build Alyntiq's backtesting engine.
+Implement baseline trading strategies and compare them consistently.
 
 Current Phase Document
 
 Read:
 
-docs/phases/PHASE_07_BACKTESTING.md
+docs/phases/PHASE_08_BASELINE_STRATEGIES.md
 
 Current Scope
 
-* Strategy, signal, order, fill, position, portfolio, and trade objects
-* Market-bar-to-portfolio simulation flow
-* slippage and commission simulation
-* virtual initial capital of $100,000 USD
-* return, risk, and trade metrics defined in the phase document
+* Buy & Hold, Moving Average Crossover, RSI Mean Reversion, Momentum, and Random Strategy
+* equal historical periods and cost assumptions for every strategy
+* comparison of return, Sharpe, Sortino, maximum drawdown, and number of trades
 
 Explicitly Out of Scope
 
-* baseline or ML strategy implementations
 * risk management
 * paper trading
 * frontend
 
 Phase Completion
 
-When Phase 7 is complete:
+When Phase 8 is complete:
 
 1. Change status to COMPLETE and record relevant architecture decisions.
-2. Change this file to Phase 8.
+2. Change this file to Phase 9.
 3. Do not delete the completed phase documentation.

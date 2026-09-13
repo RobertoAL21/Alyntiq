@@ -9,11 +9,11 @@ feature-engineering.md
 target-generation.md
 baseline-models.md
 advanced-models.md
+backtesting.md
 
 Potential future documents:
 
 feature-pipeline.md
-backtesting-engine.md
 risk-engine.md
 execution-engine.md
 portfolio-engine.md

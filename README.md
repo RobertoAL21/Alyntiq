@@ -1,17 +1,17 @@
 # Alyntiq
 
 Alyntiq is a professional AI-powered quantitative research and paper-trading platform.
-Phases 0 through 6 are complete: foundation, historical market data, exploratory data
+Phases 0 through 7 are complete: foundation, historical market data, exploratory data
 analysis, feature engineering, target generation, baseline-model evaluation, and
-advanced-model evaluation.
+advanced-model evaluation, and the historical backtesting engine.
 
 The intended long-term flow is:
 
 Market Data → Features → Models → Strategy → Risk → Execution → Portfolio
 
-Historical market-data ingestion, versioned feature and target generation, and
-walk-forward baseline-model evaluation are available. Backtesting, strategies, risk,
-execution, and trading functionality are not implemented.
+Historical market-data ingestion, versioned feature and target generation, walk-forward
+model evaluation, and a historical backtesting engine are available. Concrete strategies,
+risk, broker execution, and trading functionality are not implemented.
 
 ## Safety
 
@@ -24,7 +24,8 @@ runtime settings and JSON structured logging are in `core/`, SQLAlchemy/Alembic
 infrastructure is in `db/`, historical market-data ingestion is in `market_data/`,
 point-in-time transformations are in `features/`, labels are in `targets/`, and baseline
 and advanced-model evaluation are in `models/`. PostgreSQL, Redis, and a persistent
-local MLflow store are provisioned with Docker Compose for local development.
+local MLflow store are provisioned with Docker Compose for local development. The pure,
+in-memory historical simulator is isolated in `backtesting/`.
 
 ## Requirements
 
@@ -146,6 +147,18 @@ MLflow records the selected parameters, validation score, holdout metrics, trial
 feature importance, and leaderboard. The output compares prediction quality only; it is
 not a backtest, trading signal, or financial advice.
 
+## Historical backtesting engine
+
+The Phase 7 engine supplies strategy-facing signals, orders, fills, long-only positions,
+portfolio accounting, closed trades, an equity curve, and historical performance metrics.
+A signal observed after a completed bar fills at the next bar's open, with configurable
+commission and directional slippage. This prevents same-bar execution look-ahead.
+
+The engine is intentionally single-symbol and long-only. It has no concrete strategies,
+risk decisions, broker integration, persistence, or paper/live-trading capability. See
+[the backtesting architecture](docs/architecture/backtesting.md) for interfaces, metrics,
+assumptions, and verification commands.
+
 ## Run with Docker
 
 After creating `.env`, build and start all services:
@@ -193,6 +206,7 @@ backend/
     features/          Point-in-time feature pipeline
     targets/           Versioned supervised-learning targets
     models/            Dataset assembly, baseline, and advanced experiments
+    backtesting/       Historical simulation and performance metrics
   alembic/             Database migration environment
   tests/               API tests
 docker-compose.yml     Backend, PostgreSQL, and Redis services

@@ -1,5 +1,9 @@
 Phase 7 — Backtesting Engine
 
+Status
+
+COMPLETE
+
 Objective
 
 Build Alyntiq’s backtesting engine.
