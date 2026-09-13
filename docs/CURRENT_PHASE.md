@@ -2,7 +2,7 @@ Alyntiq — Current Phase
 
 Current Phase
 
-Phase 6 — Advanced Models
+Phase 7 — Backtesting Engine
 
 Status
 
@@ -10,33 +10,33 @@ NOT STARTED
 
 Objective
 
-Evaluate advanced tree-based models with disciplined optimization and model comparison.
+Build Alyntiq's backtesting engine.
 
 Current Phase Document
 
 Read:
 
-docs/phases/PHASE_06_ADVANCED_MODELS.md
+docs/phases/PHASE_07_BACKTESTING.md
 
 Current Scope
 
-* Random Forest, XGBoost, and LightGBM
-* Optuna hyperparameter optimization
-* feature importance and optional SHAP analysis
-* model leaderboard
+* Strategy, signal, order, fill, position, portfolio, and trade objects
+* Market-bar-to-portfolio simulation flow
+* slippage and commission simulation
+* virtual initial capital of $100,000 USD
+* return, risk, and trade metrics defined in the phase document
 
 Explicitly Out of Scope
 
-* backtesting
-* strategies
+* baseline or ML strategy implementations
 * risk management
 * paper trading
 * frontend
 
 Phase Completion
 
-When Phase 6 is complete:
+When Phase 7 is complete:
 
 1. Change status to COMPLETE and record relevant architecture decisions.
-2. Change this file to Phase 7.
+2. Change this file to Phase 8.
 3. Do not delete the completed phase documentation.

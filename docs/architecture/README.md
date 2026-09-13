@@ -8,6 +8,7 @@ market-data.md
 feature-engineering.md
 target-generation.md
 baseline-models.md
+advanced-models.md
 
 Potential future documents:
 

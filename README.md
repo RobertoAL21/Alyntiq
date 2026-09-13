@@ -1,8 +1,9 @@
 # Alyntiq
 
 Alyntiq is a professional AI-powered quantitative research and paper-trading platform.
-Phases 0 through 5 are complete: foundation, historical market data, exploratory data
-analysis, feature engineering, target generation, and baseline-model evaluation.
+Phases 0 through 6 are complete: foundation, historical market data, exploratory data
+analysis, feature engineering, target generation, baseline-model evaluation, and
+advanced-model evaluation.
 
 The intended long-term flow is:
 
@@ -22,8 +23,8 @@ The FastAPI application is in `backend/app`. The HTTP layer is isolated in `api/
 runtime settings and JSON structured logging are in `core/`, SQLAlchemy/Alembic
 infrastructure is in `db/`, historical market-data ingestion is in `market_data/`,
 point-in-time transformations are in `features/`, labels are in `targets/`, and baseline
-evaluation is in `models/`. PostgreSQL, Redis, and a persistent local MLflow store are
-provisioned with Docker Compose for local development.
+and advanced-model evaluation are in `models/`. PostgreSQL, Redis, and a persistent
+local MLflow store are provisioned with Docker Compose for local development.
 
 ## Requirements
 
@@ -123,6 +124,28 @@ This command records the random, majority-class, logistic-regression, and decisi
 results in local MLflow. Its predictive metrics are research outputs, not trading
 performance or financial advice.
 
+## Advanced-model evaluation
+
+Phase 6 adds Random Forest, XGBoost, and LightGBM experiments. Optuna selects each
+family's hyperparameters using the earlier expanding walk-forward folds, while the final
+chronological fold remains an untouched holdout for the leaderboard:
+
+```bash
+python -m scripts.run_advanced_models \
+  --source alpaca:iex:raw \
+  --timeframe 1D \
+  --feature-version features-v1 \
+  --target-version targets-v1 \
+  --dataset-version dataset-v1 \
+  --n-splits 3 \
+  --gap 1 \
+  --n-trials 10
+```
+
+MLflow records the selected parameters, validation score, holdout metrics, trial history,
+feature importance, and leaderboard. The output compares prediction quality only; it is
+not a backtest, trading signal, or financial advice.
+
 ## Run with Docker
 
 After creating `.env`, build and start all services:
@@ -169,7 +192,7 @@ backend/
     db/                SQLAlchemy engine, sessions, and base
     features/          Point-in-time feature pipeline
     targets/           Versioned supervised-learning targets
-    models/            Dataset assembly and baseline experiments
+    models/            Dataset assembly, baseline, and advanced experiments
   alembic/             Database migration environment
   tests/               API tests
 docker-compose.yml     Backend, PostgreSQL, and Redis services
