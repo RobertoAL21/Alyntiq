@@ -12,11 +12,11 @@ advanced-models.md
 backtesting.md
 baseline-strategies.md
 ml-strategy.md
+risk-engine.md
 
 Potential future documents:
 
 feature-pipeline.md
-risk-engine.md
 execution-engine.md
 portfolio-engine.md
 ml-pipeline.md

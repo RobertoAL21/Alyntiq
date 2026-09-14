@@ -18,6 +18,8 @@ from app.backtesting.types import (
     Strategy,
     Trade,
 )
+from app.risk.engine import RiskEngine
+from app.risk.types import ProposedOrder, RiskContext
 
 
 class BacktestInputError(ValueError):
@@ -27,8 +29,13 @@ class BacktestInputError(ValueError):
 class BacktestEngine:
     """Run a single-symbol, long-only historical simulation without same-bar look-ahead."""
 
-    def __init__(self, config: BacktestConfig | None = None) -> None:
+    def __init__(
+        self,
+        config: BacktestConfig | None = None,
+        risk_engine: RiskEngine | None = None,
+    ) -> None:
         self._config = config or BacktestConfig()
+        self._risk_engine = risk_engine
 
     def run(self, bars: Sequence[BacktestBar], strategy: Strategy) -> BacktestResult:
         bars = tuple(bars)
@@ -61,18 +68,31 @@ class BacktestEngine:
                 pending_order_index = None
 
             equity_curve.append(_equity_point(portfolio, bar))
-            signal = strategy.on_bar(bar, portfolio)
-            if signal is not None:
-                _validate_signal(signal, bar)
-                orders.append(
-                    Order(
-                        id=f"order-{len(orders) + 1:06d}",
-                        created_at=bar.timestamp,
+            proposal = self._risk_protection_proposal(portfolio, bar, equity_curve, fills, trades)
+            if proposal is None:
+                signal = strategy.on_bar(bar, portfolio)
+                if signal is not None:
+                    _validate_signal(signal, bar)
+                    proposal = ProposedOrder(
+                        timestamp=signal.timestamp,
                         symbol=signal.symbol,
                         side=signal.side,
                         quantity=signal.quantity,
-                        status=OrderStatus.PENDING,
                         lineage=signal.lineage,
+                    )
+                    proposal = self._risk_approved_proposal(
+                        proposal, portfolio, bar, equity_curve, fills, trades
+                    )
+            if proposal is not None:
+                orders.append(
+                    Order(
+                        id=f"order-{len(orders) + 1:06d}",
+                        created_at=proposal.timestamp,
+                        symbol=proposal.symbol,
+                        side=proposal.side,
+                        quantity=proposal.quantity,
+                        status=OrderStatus.PENDING,
+                        lineage=proposal.lineage,
                     )
                 )
                 pending_order_index = len(orders) - 1
@@ -120,6 +140,38 @@ class BacktestEngine:
             return portfolio, None, None, str(error)
         return application.portfolio, fill, application.trade, None
 
+    def _risk_protection_proposal(
+        self,
+        portfolio: Portfolio,
+        bar: BacktestBar,
+        equity_curve: list[EquityPoint],
+        fills: list[Fill],
+        trades: list[Trade],
+    ) -> ProposedOrder | None:
+        if self._risk_engine is None:
+            return None
+        decision = self._risk_engine.evaluate_protection(
+            _risk_context(portfolio, bar, equity_curve, fills, trades)
+        )
+        return None if decision is None else decision.modified_order
+
+    def _risk_approved_proposal(
+        self,
+        proposal: ProposedOrder,
+        portfolio: Portfolio,
+        bar: BacktestBar,
+        equity_curve: list[EquityPoint],
+        fills: list[Fill],
+        trades: list[Trade],
+    ) -> ProposedOrder | None:
+        if self._risk_engine is None:
+            return proposal
+        decision = self._risk_engine.evaluate(
+            proposal,
+            _risk_context(portfolio, bar, equity_curve, fills, trades),
+        )
+        return decision.modified_order if decision.approved else None
+
 
 def _validate_bars(bars: Sequence[BacktestBar]) -> None:
     if not bars:
@@ -157,4 +209,32 @@ def _equity_point(portfolio: Portfolio, bar: BacktestBar) -> EquityPoint:
         cash=portfolio.cash,
         position_market_value=position_market_value,
         equity=portfolio.cash + position_market_value,
+    )
+
+
+def _risk_context(
+    portfolio: Portfolio,
+    bar: BacktestBar,
+    equity_curve: list[EquityPoint],
+    fills: list[Fill],
+    trades: list[Trade],
+) -> RiskContext:
+    position = portfolio.position
+    current_equity = equity_curve[-1].equity
+    peak_equity = max(point.equity for point in equity_curve)
+    today = bar.timestamp.date()
+    return RiskContext(
+        timestamp=bar.timestamp,
+        symbol=bar.symbol,
+        reference_price=bar.close,
+        equity=current_equity,
+        cash=portfolio.cash,
+        position_quantity=0 if position is None else position.quantity,
+        average_entry_price=None if position is None else position.average_entry_price,
+        daily_realized_pnl=sum(
+            (trade.net_pnl for trade in trades if trade.exit_timestamp.date() == today),
+            Decimal("0"),
+        ),
+        current_drawdown=current_equity / peak_equity - Decimal("1"),
+        filled_orders_today=sum(1 for fill in fills if fill.timestamp.date() == today),
     )

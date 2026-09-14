@@ -3,8 +3,9 @@
 ## Scope
 
 Phase 7 provides a deterministic, in-memory historical simulator. It is intentionally
-independent from FastAPI, PostgreSQL, brokers, model inference, risk rules, and concrete
-strategy implementations.
+independent from FastAPI, PostgreSQL, brokers, model inference, and concrete strategy
+implementations. It can optionally receive explicit decisions from the Phase 10 risk
+engine; it does not define risk policy itself.
 
 The `app.backtesting` package defines these explicit interfaces and value objects:
 
@@ -34,9 +35,9 @@ accounting invariants, not Phase 10 risk decisions.
 ## Deliberate Phase 7 Limits
 
 The engine supports one symbol and long-only positions. It does not persist simulations,
-choose a strategy, size positions through risk rules, submit broker orders, or support
-shorting, leverage, multiple assets, or live/paper trading. Those capabilities belong to
-later phases.
+choose a strategy, submit broker orders, or support shorting, leverage, multiple assets,
+or live/paper trading. Risk policy belongs to `app.risk`; the backtest only applies its
+approved or reduced proposed orders. Those capabilities otherwise belong to later phases.
 
 ## Costs and Metrics
 

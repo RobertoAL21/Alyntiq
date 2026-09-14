@@ -2,7 +2,7 @@ Alyntiq — Current Phase
 
 Current Phase
 
-Phase 10 — Risk Engine
+Phase 11 — Portfolio Engine
 
 Status
 
@@ -10,18 +10,18 @@ NOT STARTED
 
 Objective
 
-Evaluate proposed trades independently and return explicit risk decisions.
+Support multi-asset portfolio accounting and fixed-percentage position sizing.
 
 Current Phase Document
 
 Read:
 
-docs/phases/PHASE_10_RISK_ENGINE.md
+docs/phases/PHASE_11_PORTFOLIO_ENGINE.md
 
 Current Scope
 
-* maximum position size, exposure, loss, drawdown, stop, take-profit, trade-count, and cash-reserve rules
-* approved or rejected `RiskDecision` values with reason, rule, original order, and modified order
+* multiple assets, cash, equity, positions, realized and unrealized PnL, and exposure
+* initial fixed-percentage position sizing
 
 Explicitly Out of Scope
 
@@ -31,8 +31,8 @@ Explicitly Out of Scope
 
 Phase Completion
 
-When Phase 10 is complete:
+When Phase 11 is complete:
 
 1. Change status to COMPLETE and record relevant architecture decisions.
-2. Change this file to Phase 11.
+2. Change this file to Phase 12.
 3. Do not delete the completed phase documentation.

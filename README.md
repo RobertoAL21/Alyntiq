@@ -1,10 +1,10 @@
 # Alyntiq
 
 Alyntiq is a professional AI-powered quantitative research and paper-trading platform.
-Phases 0 through 9 are complete: foundation, historical market data, exploratory data
+Phases 0 through 10 are complete: foundation, historical market data, exploratory data
 analysis, feature engineering, target generation, baseline-model evaluation, and
-advanced-model evaluation, the historical backtesting engine, baseline strategies, and
-the ML threshold strategy.
+advanced-model evaluation, the historical backtesting engine, baseline strategies, the ML
+threshold strategy, and an independent pre-trade risk engine.
 
 The intended long-term flow is:
 
@@ -12,8 +12,8 @@ Market Data → Features → Models → Strategy → Risk → Execution → Port
 
 Historical market-data ingestion, versioned feature and target generation, walk-forward
 model evaluation, a historical backtesting engine, comparable baseline strategies, and
-versioned ML trading proposals are available. Risk, broker execution, and trading
-functionality are not implemented.
+versioned ML trading proposals, and explicit historical risk decisions are available.
+Broker execution and trading functionality are not implemented.
 
 ## Safety
 
@@ -27,7 +27,8 @@ infrastructure is in `db/`, historical market-data ingestion is in `market_data/
 point-in-time transformations are in `features/`, labels are in `targets/`, and baseline
 and advanced-model evaluation are in `models/`. PostgreSQL, Redis, and a persistent
 local MLflow store are provisioned with Docker Compose for local development. The pure,
-in-memory historical simulator is isolated in `backtesting/`.
+in-memory historical simulator is isolated in `backtesting/`. Independent pre-trade risk
+evaluation is isolated in `risk/`.
 
 ## Requirements
 
@@ -156,10 +157,10 @@ portfolio accounting, closed trades, an equity curve, and historical performance
 A signal observed after a completed bar fills at the next bar's open, with configurable
 commission and directional slippage. This prevents same-bar execution look-ahead.
 
-The engine is intentionally single-symbol and long-only. It has no risk decisions,
-broker integration, persistence, or paper/live-trading capability. See [the backtesting
-architecture](docs/architecture/backtesting.md) for interfaces, metrics, assumptions, and
-verification commands.
+The engine is intentionally single-symbol and long-only. It can apply optional, explicit
+pre-trade risk decisions, but it has no broker integration, persistence, or paper/live
+trading capability. See [the backtesting architecture](docs/architecture/backtesting.md)
+for interfaces, metrics, assumptions, and verification commands.
 
 ## Baseline strategy comparison
 
@@ -188,6 +189,18 @@ Thresholds are selected only from labeled validation predictions; the strategy c
 unlabeled point-in-time predictions and records model, feature, and strategy lineage on
 the resulting closed trade. It does not train or serve a model, approve risk, or place an
 order. See [the ML strategy architecture](docs/architecture/ml-strategy.md).
+
+## Pre-trade risk engine
+
+Phase 10 adds an optional independent risk stage between a strategy proposal and the
+backtest's pending order. It can approve, reduce, or reject a proposed order using explicit
+position-size, exposure, daily-realized-loss, drawdown, trade-count, and cash-reserve
+limits. It also creates close-triggered stop-loss and take-profit exit proposals that fill
+at the next bar open. Limits are disabled unless configured.
+
+The engine is historical-research infrastructure only: it does not place broker orders,
+mutate portfolio state, or enable paper/live execution. See [the risk-engine
+architecture](docs/architecture/risk-engine.md) and [ADR 011](docs/decisions/011-use-explicit-pretrade-risk-decisions.md).
 
 ## Run with Docker
 
