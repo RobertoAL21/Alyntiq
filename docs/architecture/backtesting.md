@@ -10,8 +10,9 @@ The `app.backtesting` package defines these explicit interfaces and value object
 
 - `Strategy`: protocol that observes a completed bar and returns zero or one `Signal`.
 - `Signal`, `Order`, and `Fill`: the strategy proposal, pending execution, and simulated
-  execution record.
-- `Position`, `Portfolio`, and `Trade`: long-only accounting state and closed quantities.
+  execution record. A model-driven signal may carry immutable version lineage.
+- `Position`, `Portfolio`, and `Trade`: long-only accounting state and closed quantities;
+  closed trades preserve entry and exit lineage when a model strategy supplied it.
 - `EquityPoint`, `BacktestMetrics`, and `BacktestResult`: historical output and evaluation.
 
 ## Execution Timeline

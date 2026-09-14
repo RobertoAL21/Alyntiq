@@ -72,6 +72,7 @@ class BacktestEngine:
                         side=signal.side,
                         quantity=signal.quantity,
                         status=OrderStatus.PENDING,
+                        lineage=signal.lineage,
                     )
                 )
                 pending_order_index = len(orders) - 1
@@ -111,6 +112,7 @@ class BacktestEngine:
             quantity=order.quantity,
             price=fill_price,
             commission=commission,
+            lineage=order.lineage,
         )
         try:
             application = apply_fill(portfolio, fill, trade_id=f"trade-{trade_number:06d}")

@@ -2,7 +2,7 @@ Alyntiq — Current Phase
 
 Current Phase
 
-Phase 9 — ML Trading Strategy
+Phase 10 — Risk Engine
 
 Status
 
@@ -10,30 +10,29 @@ NOT STARTED
 
 Objective
 
-Convert ML predictions into trading decisions without optimizing thresholds on test data.
+Evaluate proposed trades independently and return explicit risk decisions.
 
 Current Phase Document
 
 Read:
 
-docs/phases/PHASE_09_ML_STRATEGY.md
+docs/phases/PHASE_10_RISK_ENGINE.md
 
 Current Scope
 
-* model-probability thresholds that propose buy, sell, or hold actions
-* validation-only threshold selection
-* model, strategy, and feature version lineage on proposed trades
+* maximum position size, exposure, loss, drawdown, stop, take-profit, trade-count, and cash-reserve rules
+* approved or rejected `RiskDecision` values with reason, rule, original order, and modified order
 
 Explicitly Out of Scope
 
-* risk management
+* broker execution
 * paper trading
 * frontend
 
 Phase Completion
 
-When Phase 9 is complete:
+When Phase 10 is complete:
 
 1. Change status to COMPLETE and record relevant architecture decisions.
-2. Change this file to Phase 10.
+2. Change this file to Phase 11.
 3. Do not delete the completed phase documentation.

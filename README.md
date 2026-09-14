@@ -1,17 +1,19 @@
 # Alyntiq
 
 Alyntiq is a professional AI-powered quantitative research and paper-trading platform.
-Phases 0 through 8 are complete: foundation, historical market data, exploratory data
+Phases 0 through 9 are complete: foundation, historical market data, exploratory data
 analysis, feature engineering, target generation, baseline-model evaluation, and
-advanced-model evaluation, the historical backtesting engine, and baseline strategies.
+advanced-model evaluation, the historical backtesting engine, baseline strategies, and
+the ML threshold strategy.
 
 The intended long-term flow is:
 
 Market Data → Features → Models → Strategy → Risk → Execution → Portfolio
 
 Historical market-data ingestion, versioned feature and target generation, walk-forward
-model evaluation, a historical backtesting engine, and comparable baseline strategies are
-available. Risk, broker execution, and trading functionality are not implemented.
+model evaluation, a historical backtesting engine, comparable baseline strategies, and
+versioned ML trading proposals are available. Risk, broker execution, and trading
+functionality are not implemented.
 
 ## Safety
 
@@ -179,6 +181,14 @@ The command returns return, Sharpe, Sortino, maximum drawdown, and trade-count c
 metrics. It is historical research only; it does not create a model-driven, risk-approved,
 or broker-executable trade. See [the baseline strategy architecture](docs/architecture/baseline-strategies.md).
 
+## ML threshold strategy
+
+Phase 9 converts supplied, versioned model probabilities into BUY, SELL, or HOLD proposals.
+Thresholds are selected only from labeled validation predictions; the strategy consumes
+unlabeled point-in-time predictions and records model, feature, and strategy lineage on
+the resulting closed trade. It does not train or serve a model, approve risk, or place an
+order. See [the ML strategy architecture](docs/architecture/ml-strategy.md).
+
 ## Run with Docker
 
 After creating `.env`, build and start all services:
@@ -227,7 +237,7 @@ backend/
     targets/           Versioned supervised-learning targets
     models/            Dataset assembly, baseline, and advanced experiments
     backtesting/       Historical simulation and performance metrics
-    strategies/        Baseline trading-decision implementations
+    strategies/        Baseline and ML trading-decision implementations
   alembic/             Database migration environment
   tests/               API tests
 docker-compose.yml     Backend, PostgreSQL, and Redis services

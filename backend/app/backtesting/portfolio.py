@@ -51,6 +51,7 @@ def _apply_buy(portfolio: Portfolio, fill: Fill) -> FillApplication:
         entry_commission=fill.commission
         if previous is None
         else previous.entry_commission + fill.commission,
+        entry_lineage=fill.lineage if previous is None else previous.entry_lineage,
     )
     return FillApplication(
         portfolio=Portfolio(
@@ -83,6 +84,7 @@ def _apply_sell(portfolio: Portfolio, fill: Fill, *, trade_id: str) -> FillAppli
             average_entry_price=position.average_entry_price,
             opened_at=position.opened_at,
             entry_commission=position.entry_commission - entry_commission,
+            entry_lineage=position.entry_lineage,
         )
     )
     trade = Trade(
@@ -97,6 +99,8 @@ def _apply_sell(portfolio: Portfolio, fill: Fill, *, trade_id: str) -> FillAppli
         exit_commission=fill.commission,
         gross_pnl=gross_pnl,
         net_pnl=net_pnl,
+        entry_lineage=position.entry_lineage,
+        exit_lineage=fill.lineage,
     )
     return FillApplication(
         portfolio=Portfolio(

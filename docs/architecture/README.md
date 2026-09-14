@@ -11,6 +11,7 @@ baseline-models.md
 advanced-models.md
 backtesting.md
 baseline-strategies.md
+ml-strategy.md
 
 Potential future documents:
 

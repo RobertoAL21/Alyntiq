@@ -18,6 +18,26 @@ class OrderStatus(StrEnum):
 
 
 @dataclass(frozen=True)
+class SignalLineage:
+    """Version lineage and probability that caused a model-driven strategy proposal."""
+
+    model_version: str
+    strategy_version: str
+    feature_version: str
+    up_probability: float
+
+    def __post_init__(self) -> None:
+        if not self.model_version.strip():
+            raise ValueError("model_version must not be blank")
+        if not self.strategy_version.strip():
+            raise ValueError("strategy_version must not be blank")
+        if not self.feature_version.strip():
+            raise ValueError("feature_version must not be blank")
+        if not 0 <= self.up_probability <= 1:
+            raise ValueError("up_probability must be between 0 and 1")
+
+
+@dataclass(frozen=True)
 class BacktestBar:
     """One fully formed historical OHLC bar available to a backtest strategy."""
 
@@ -49,6 +69,7 @@ class Signal:
     symbol: str
     side: SignalSide
     quantity: int
+    lineage: SignalLineage | None = None
 
     def __post_init__(self) -> None:
         if self.timestamp.tzinfo is None or self.timestamp.utcoffset() is None:
@@ -74,6 +95,7 @@ class Order:
     quantity: int
     status: OrderStatus
     rejection_reason: str | None = None
+    lineage: SignalLineage | None = None
 
 
 @dataclass(frozen=True)
@@ -88,6 +110,7 @@ class Fill:
     quantity: int
     price: Decimal
     commission: Decimal
+    lineage: SignalLineage | None = None
 
     @property
     def notional(self) -> Decimal:
@@ -103,6 +126,7 @@ class Position:
     average_entry_price: Decimal
     opened_at: datetime
     entry_commission: Decimal
+    entry_lineage: SignalLineage | None = None
 
 
 @dataclass(frozen=True)
@@ -130,6 +154,8 @@ class Trade:
     exit_commission: Decimal
     gross_pnl: Decimal
     net_pnl: Decimal
+    entry_lineage: SignalLineage | None = None
+    exit_lineage: SignalLineage | None = None
 
 
 @dataclass(frozen=True)
