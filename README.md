@@ -1,11 +1,12 @@
 # Alyntiq
 
 Alyntiq is a professional AI-powered quantitative research and paper-trading platform.
-Phases 0 through 13 are complete: foundation, historical market data, exploratory data
+Phases 0 through 14 are complete: foundation, historical market data, exploratory data
 analysis, feature engineering, target generation, baseline-model evaluation, and
 advanced-model evaluation, the historical backtesting engine, baseline strategies, the ML
 threshold strategy, an independent pre-trade risk engine, multi-asset portfolio accounting,
-and a paper-only Alpaca broker adapter, and real-time Alpaca minute-bar consumption.
+and a paper-only Alpaca broker adapter, real-time Alpaca minute-bar consumption, and a
+trading-decision audit trail.
 
 The intended long-term flow is:
 
@@ -14,8 +15,9 @@ Market Data → Features → Models → Strategy → Risk → Execution → Port
 Historical market-data ingestion, versioned feature and target generation, walk-forward
 model evaluation, a historical backtesting engine, comparable baseline strategies, and
 versioned ML trading proposals, explicit historical risk decisions, and multi-asset
-portfolio valuation, a tightly scoped paper-broker interface, and ordered real-time bar
-consumption are available. Live broker execution is not implemented.
+portfolio valuation, a tightly scoped paper-broker interface, ordered real-time bar
+consumption, and decision-to-execution audit records are available. Live broker execution
+is not implemented.
 
 ## Safety
 
@@ -33,6 +35,7 @@ in-memory historical simulator is isolated in `backtesting/`. Independent pre-tr
 evaluation is isolated in `risk/`, multi-asset portfolio accounting is isolated in
 `portfolio/`, the paper-only broker adapter is isolated in `execution/`, and real-time
 market-data consumption is isolated in `market_data/`.
+The immutable decision audit trail is isolated in `audit/`.
 
 ## Requirements
 
@@ -242,6 +245,17 @@ The consumer does not store bars or invoke feature, strategy, risk, execution, o
 code. It starts no background task by itself. See [the real-time market-data
 architecture](docs/architecture/realtime-market-data.md) and [ADR 014](docs/decisions/014-consume-ordered-minute-bars-from-alpaca-websockets.md).
 
+## Trading audit trail
+
+Phase 14 persists each `TradingDecision` with its model, strategy, and feature lineage;
+prediction and confidence; signal; risk outcome; reason; broker order id; and execution
+facts. An approved decision may gain one order id and one execution outcome. Exact repeated
+reports are idempotent, while conflicting updates are rejected to preserve reconstruction.
+
+The audit module records supplied facts only. It does not place an order or start an
+automated execution workflow. Apply the migration with `alembic upgrade head`. See [the
+trading-audit architecture](docs/architecture/trading-audit-trail.md) and [ADR 015](docs/decisions/015-use-append-first-trading-decision-audit-records.md).
+
 ## Run with Docker
 
 After creating `.env`, build and start all services:
@@ -293,6 +307,7 @@ backend/
     risk/              Independent pre-trade risk decisions
     portfolio/         Multi-asset accounting and position sizing
     execution/         Paper-only broker contract and Alpaca adapter
+    audit/             Immutable trading-decision audit records
     market_data/       Historical providers and real-time bar consumption
     strategies/        Baseline and ML trading-decision implementations
   alembic/             Database migration environment

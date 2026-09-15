@@ -5,7 +5,12 @@ from sqlalchemy import engine_from_config, pool
 from alembic import context
 from app.core.config import get_settings
 from app.db.base import Base
-from app.db.models import MarketBar, MarketFeature, MarketTarget  # noqa: F401
+from app.db.models import (  # noqa: F401
+    MarketBar,
+    MarketFeature,
+    MarketTarget,
+    TradingDecisionRecord,
+)
 
 config = context.config
 

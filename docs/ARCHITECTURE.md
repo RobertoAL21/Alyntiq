@@ -127,6 +127,7 @@ strategies/
 risk/
 execution/
 portfolio/
+audit/
 backtesting/
 services/
 workers/

@@ -16,6 +16,7 @@ risk-engine.md
 portfolio-engine.md
 execution-engine.md
 realtime-market-data.md
+trading-audit-trail.md
 
 Potential future documents:
 
