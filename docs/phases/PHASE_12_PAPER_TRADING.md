@@ -1,5 +1,7 @@
 Phase 12 — Paper Trading
 
+Status: COMPLETE
+
 Provider
 
 Alpaca Paper Trading.

@@ -42,7 +42,8 @@ notional and caps the result by available cash. Its output is only a `PositionSi
 strategy, risk, and execution layers remain responsible for whether and how to use it.
 
 This first sizing policy is not volatility-adjusted and does not apply Kelly sizing. It
-also does not estimate commission, slippage, leverage, shorting, or partial fills.
+also does not estimate commission, slippage, leverage, shorting, or partial fills. The
+ledger itself remains independent from the Phase 12 paper-broker adapter.
 
 ## Relationship to historical backtesting
 

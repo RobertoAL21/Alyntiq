@@ -1,11 +1,11 @@
 # Alyntiq
 
 Alyntiq is a professional AI-powered quantitative research and paper-trading platform.
-Phases 0 through 11 are complete: foundation, historical market data, exploratory data
+Phases 0 through 12 are complete: foundation, historical market data, exploratory data
 analysis, feature engineering, target generation, baseline-model evaluation, and
 advanced-model evaluation, the historical backtesting engine, baseline strategies, the ML
-threshold strategy, an independent pre-trade risk engine, and multi-asset portfolio
-accounting.
+threshold strategy, an independent pre-trade risk engine, multi-asset portfolio accounting,
+and a paper-only Alpaca broker adapter.
 
 The intended long-term flow is:
 
@@ -14,8 +14,8 @@ Market Data → Features → Models → Strategy → Risk → Execution → Port
 Historical market-data ingestion, versioned feature and target generation, walk-forward
 model evaluation, a historical backtesting engine, comparable baseline strategies, and
 versioned ML trading proposals, explicit historical risk decisions, and multi-asset
-portfolio valuation are available. Broker execution and trading functionality are not
-implemented.
+portfolio valuation, and a tightly scoped paper-broker interface are available. Live broker
+execution is not implemented.
 
 ## Safety
 
@@ -30,8 +30,8 @@ point-in-time transformations are in `features/`, labels are in `targets/`, and 
 and advanced-model evaluation are in `models/`. PostgreSQL, Redis, and a persistent
 local MLflow store are provisioned with Docker Compose for local development. The pure,
 in-memory historical simulator is isolated in `backtesting/`. Independent pre-trade risk
-evaluation is isolated in `risk/`, and multi-asset portfolio accounting is isolated in
-`portfolio/`.
+evaluation is isolated in `risk/`, multi-asset portfolio accounting is isolated in
+`portfolio/`, and the paper-only broker adapter is isolated in `execution/`.
 
 ## Requirements
 
@@ -55,8 +55,8 @@ Configure environment variables from the repository root:
 cp .env.example .env
 ```
 
-`ALPACA_API_KEY` and `ALPACA_SECRET_KEY` are required only for Alpaca ingestion. Do not
-commit `.env`.
+`ALPACA_API_KEY` and `ALPACA_SECRET_KEY` are required for Alpaca ingestion and the optional
+paper-broker adapter. Do not commit `.env`.
 
 ## Run locally
 
@@ -214,9 +214,21 @@ realized and unrealized PnL, and per-position and gross long exposure.
 
 `FixedPercentageSizer` returns an incremental whole-share buy quantity for a target portion
 of marked equity, capped by available cash. It neither creates orders nor replaces the
-strategy, risk, or execution layers. No broker or paper-trading integration exists yet.
-See [the portfolio-engine architecture](docs/architecture/portfolio-engine.md) and
+strategy, risk, or execution layers. The ledger remains independent from the paper-broker
+adapter. See [the portfolio-engine architecture](docs/architecture/portfolio-engine.md) and
 [ADR 012](docs/decisions/012-keep-multi-asset-portfolio-accounting-independent.md).
+
+## Alpaca Paper Trading adapter
+
+Phase 12 provides a provider-neutral broker interface plus `AlpacaPaperBroker` for account,
+position, and order operations. It is hard-bound to Alpaca's paper endpoint and rejects any
+setting other than `TRADING_ENVIRONMENT=paper`. It supports explicit whole-share market/day
+orders only. The project-facing execution helper accepts an approved `RiskDecision` before
+translating it to the broker contract.
+
+There are no API routes, workers, scheduled tasks, or automatic order submission. Paper
+orders remain simulated external side effects and are not a proxy for live performance. See
+[the execution architecture](docs/architecture/execution-engine.md) and [ADR 013](docs/decisions/013-bind-paper-execution-to-alpaca-paper-endpoint.md).
 
 ## Run with Docker
 
@@ -268,6 +280,7 @@ backend/
     backtesting/       Historical simulation and performance metrics
     risk/              Independent pre-trade risk decisions
     portfolio/         Multi-asset accounting and position sizing
+    execution/         Paper-only broker contract and Alpaca adapter
     strategies/        Baseline and ML trading-decision implementations
   alembic/             Database migration environment
   tests/               API tests

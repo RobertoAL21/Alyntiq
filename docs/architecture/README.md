@@ -14,11 +14,11 @@ baseline-strategies.md
 ml-strategy.md
 risk-engine.md
 portfolio-engine.md
+execution-engine.md
 
 Potential future documents:
 
 feature-pipeline.md
-execution-engine.md
 ml-pipeline.md
 realtime-system.md
 
