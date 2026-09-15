@@ -1,10 +1,11 @@
 # Alyntiq
 
 Alyntiq is a professional AI-powered quantitative research and paper-trading platform.
-Phases 0 through 10 are complete: foundation, historical market data, exploratory data
+Phases 0 through 11 are complete: foundation, historical market data, exploratory data
 analysis, feature engineering, target generation, baseline-model evaluation, and
 advanced-model evaluation, the historical backtesting engine, baseline strategies, the ML
-threshold strategy, and an independent pre-trade risk engine.
+threshold strategy, an independent pre-trade risk engine, and multi-asset portfolio
+accounting.
 
 The intended long-term flow is:
 
@@ -12,8 +13,9 @@ Market Data → Features → Models → Strategy → Risk → Execution → Port
 
 Historical market-data ingestion, versioned feature and target generation, walk-forward
 model evaluation, a historical backtesting engine, comparable baseline strategies, and
-versioned ML trading proposals, and explicit historical risk decisions are available.
-Broker execution and trading functionality are not implemented.
+versioned ML trading proposals, explicit historical risk decisions, and multi-asset
+portfolio valuation are available. Broker execution and trading functionality are not
+implemented.
 
 ## Safety
 
@@ -28,7 +30,8 @@ point-in-time transformations are in `features/`, labels are in `targets/`, and 
 and advanced-model evaluation are in `models/`. PostgreSQL, Redis, and a persistent
 local MLflow store are provisioned with Docker Compose for local development. The pure,
 in-memory historical simulator is isolated in `backtesting/`. Independent pre-trade risk
-evaluation is isolated in `risk/`.
+evaluation is isolated in `risk/`, and multi-asset portfolio accounting is isolated in
+`portfolio/`.
 
 ## Requirements
 
@@ -202,6 +205,19 @@ The engine is historical-research infrastructure only: it does not place broker 
 mutate portfolio state, or enable paper/live execution. See [the risk-engine
 architecture](docs/architecture/risk-engine.md) and [ADR 011](docs/decisions/011-use-explicit-pretrade-risk-decisions.md).
 
+## Multi-asset portfolio engine
+
+Phase 11 adds an immutable, long-only multi-asset portfolio ledger. It applies already
+executed fills, tracks cash and open positions, allocates entry commissions across partial
+sales, and marks all positions using explicit completed prices. Valuations report equity,
+realized and unrealized PnL, and per-position and gross long exposure.
+
+`FixedPercentageSizer` returns an incremental whole-share buy quantity for a target portion
+of marked equity, capped by available cash. It neither creates orders nor replaces the
+strategy, risk, or execution layers. No broker or paper-trading integration exists yet.
+See [the portfolio-engine architecture](docs/architecture/portfolio-engine.md) and
+[ADR 012](docs/decisions/012-keep-multi-asset-portfolio-accounting-independent.md).
+
 ## Run with Docker
 
 After creating `.env`, build and start all services:
@@ -250,6 +266,8 @@ backend/
     targets/           Versioned supervised-learning targets
     models/            Dataset assembly, baseline, and advanced experiments
     backtesting/       Historical simulation and performance metrics
+    risk/              Independent pre-trade risk decisions
+    portfolio/         Multi-asset accounting and position sizing
     strategies/        Baseline and ML trading-decision implementations
   alembic/             Database migration environment
   tests/               API tests

@@ -35,9 +35,10 @@ accounting invariants, not Phase 10 risk decisions.
 ## Deliberate Phase 7 Limits
 
 The engine supports one symbol and long-only positions. It does not persist simulations,
-choose a strategy, submit broker orders, or support shorting, leverage, multiple assets,
-or live/paper trading. Risk policy belongs to `app.risk`; the backtest only applies its
-approved or reduced proposed orders. Those capabilities otherwise belong to later phases.
+choose a strategy, submit broker orders, schedule multi-asset trades, or support shorting,
+leverage, or live/paper trading. Risk policy belongs to `app.risk`; the backtest only
+applies its approved or reduced proposed orders. Phase 11 supplies an independent
+multi-asset portfolio ledger, not a multi-asset backtest scheduler.
 
 ## Costs and Metrics
 

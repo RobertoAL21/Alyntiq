@@ -13,12 +13,12 @@ backtesting.md
 baseline-strategies.md
 ml-strategy.md
 risk-engine.md
+portfolio-engine.md
 
 Potential future documents:
 
 feature-pipeline.md
 execution-engine.md
-portfolio-engine.md
 ml-pipeline.md
 realtime-system.md
 
