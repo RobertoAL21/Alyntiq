@@ -1,5 +1,6 @@
 from datetime import UTC, datetime
 from decimal import Decimal
+from typing import Literal
 
 from pydantic import BaseModel, ConfigDict, Field, field_validator, model_validator
 
@@ -76,3 +77,9 @@ class LatestQuote(BaseModel):
         if self.ask_price < self.bid_price:
             raise ValueError("ask price must not be below bid price")
         return self
+
+
+class RealtimeBar(HistoricalBar):
+    """A completed one-minute bar received from a live market-data stream."""
+
+    timeframe: Literal["1Min"] = "1Min"

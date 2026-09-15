@@ -1,11 +1,11 @@
 # Alyntiq
 
 Alyntiq is a professional AI-powered quantitative research and paper-trading platform.
-Phases 0 through 12 are complete: foundation, historical market data, exploratory data
+Phases 0 through 13 are complete: foundation, historical market data, exploratory data
 analysis, feature engineering, target generation, baseline-model evaluation, and
 advanced-model evaluation, the historical backtesting engine, baseline strategies, the ML
 threshold strategy, an independent pre-trade risk engine, multi-asset portfolio accounting,
-and a paper-only Alpaca broker adapter.
+and a paper-only Alpaca broker adapter, and real-time Alpaca minute-bar consumption.
 
 The intended long-term flow is:
 
@@ -14,8 +14,8 @@ Market Data → Features → Models → Strategy → Risk → Execution → Port
 Historical market-data ingestion, versioned feature and target generation, walk-forward
 model evaluation, a historical backtesting engine, comparable baseline strategies, and
 versioned ML trading proposals, explicit historical risk decisions, and multi-asset
-portfolio valuation, and a tightly scoped paper-broker interface are available. Live broker
-execution is not implemented.
+portfolio valuation, a tightly scoped paper-broker interface, and ordered real-time bar
+consumption are available. Live broker execution is not implemented.
 
 ## Safety
 
@@ -31,7 +31,8 @@ and advanced-model evaluation are in `models/`. PostgreSQL, Redis, and a persist
 local MLflow store are provisioned with Docker Compose for local development. The pure,
 in-memory historical simulator is isolated in `backtesting/`. Independent pre-trade risk
 evaluation is isolated in `risk/`, multi-asset portfolio accounting is isolated in
-`portfolio/`, and the paper-only broker adapter is isolated in `execution/`.
+`portfolio/`, the paper-only broker adapter is isolated in `execution/`, and real-time
+market-data consumption is isolated in `market_data/`.
 
 ## Requirements
 
@@ -55,8 +56,8 @@ Configure environment variables from the repository root:
 cp .env.example .env
 ```
 
-`ALPACA_API_KEY` and `ALPACA_SECRET_KEY` are required for Alpaca ingestion and the optional
-paper-broker adapter. Do not commit `.env`.
+`ALPACA_API_KEY` and `ALPACA_SECRET_KEY` are required for Alpaca ingestion, real-time data,
+and the optional paper-broker adapter. Do not commit `.env`.
 
 ## Run locally
 
@@ -230,6 +231,17 @@ There are no API routes, workers, scheduled tasks, or automatic order submission
 orders remain simulated external side effects and are not a proxy for live performance. See
 [the execution architecture](docs/architecture/execution-engine.md) and [ADR 013](docs/decisions/013-bind-paper-execution-to-alpaca-paper-endpoint.md).
 
+## Real-time Alpaca minute bars
+
+Phase 13 adds an asynchronous consumer for completed one-minute Alpaca stock bars. It uses
+the configured IEX or SIP feed, authenticates with the existing Alpaca credentials, and
+subscribes only to supplied symbols. It drops duplicate and out-of-order bars per symbol and
+uses bounded exponential reconnects for connection failures and Alpaca's connection limit.
+
+The consumer does not store bars or invoke feature, strategy, risk, execution, or broker
+code. It starts no background task by itself. See [the real-time market-data
+architecture](docs/architecture/realtime-market-data.md) and [ADR 014](docs/decisions/014-consume-ordered-minute-bars-from-alpaca-websockets.md).
+
 ## Run with Docker
 
 After creating `.env`, build and start all services:
@@ -281,6 +293,7 @@ backend/
     risk/              Independent pre-trade risk decisions
     portfolio/         Multi-asset accounting and position sizing
     execution/         Paper-only broker contract and Alpaca adapter
+    market_data/       Historical providers and real-time bar consumption
     strategies/        Baseline and ML trading-decision implementations
   alembic/             Database migration environment
   tests/               API tests

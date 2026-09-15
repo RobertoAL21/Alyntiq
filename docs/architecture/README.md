@@ -15,11 +15,11 @@ ml-strategy.md
 risk-engine.md
 portfolio-engine.md
 execution-engine.md
+realtime-market-data.md
 
 Potential future documents:
 
 feature-pipeline.md
 ml-pipeline.md
-realtime-system.md
 
 Do not document speculative systems before they are implemented.
