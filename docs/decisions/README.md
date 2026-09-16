@@ -13,6 +13,7 @@ Implemented decisions also include:
 016-keep-dashboard-presentation-only-until-read-apis-exist.md
 017-run-strategy-competitions-with-isolated-fresh-backtests.md
 018-keep-market-regimes-descriptive-and-training-period-bound.md
+019-keep-news-analysis-structured-and-trade-independent.md
 
 Each ADR should contain:
 

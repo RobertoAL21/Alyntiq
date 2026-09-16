@@ -20,6 +20,7 @@ trading-audit-trail.md
 frontend-dashboard.md
 strategy-competition.md
 market-regimes.md
+news-nlp.md
 
 Potential future documents:
 
