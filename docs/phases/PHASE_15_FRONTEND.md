@@ -1,5 +1,14 @@
 Phase 15 — Frontend Dashboard
 
+Status: COMPLETE
+
+Delivered:
+
+* standalone React, TypeScript, Vite, React Router, Tailwind CSS, and Lightweight Charts application;
+* overview, positions, trades, strategies, models, and market routes;
+* presentation-only typed demonstration data, pending future backend read APIs;
+* frontend linting, unit tests, and production build verification.
+
 ## Technology
 
 - React

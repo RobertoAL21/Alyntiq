@@ -8,6 +8,10 @@ Suggested naming:
 002-use-alpaca.md
 003-walk-forward-validation.md
 
+Implemented decisions also include:
+
+016-keep-dashboard-presentation-only-until-read-apis-exist.md
+
 Each ADR should contain:
 
 Decision

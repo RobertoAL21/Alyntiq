@@ -1,7 +1,7 @@
 # Alyntiq
 
 Alyntiq is a professional AI-powered quantitative research and paper-trading platform.
-Phases 0 through 14 are complete: foundation, historical market data, exploratory data
+Phases 0 through 15 are complete: foundation, historical market data, exploratory data
 analysis, feature engineering, target generation, baseline-model evaluation, and
 advanced-model evaluation, the historical backtesting engine, baseline strategies, the ML
 threshold strategy, an independent pre-trade risk engine, multi-asset portfolio accounting,
@@ -36,10 +36,24 @@ evaluation is isolated in `risk/`, multi-asset portfolio accounting is isolated 
 `portfolio/`, the paper-only broker adapter is isolated in `execution/`, and real-time
 market-data consumption is isolated in `market_data/`.
 The immutable decision audit trail is isolated in `audit/`.
+The standalone presentation-only React dashboard is in `frontend/`.
+
+## Frontend dashboard
+
+The dashboard currently renders a clearly labelled demonstration snapshot, because the
+backend does not yet expose read-only dashboard APIs. It does not submit orders or contain
+financial, risk, portfolio, strategy, or execution logic.
+
+```bash
+cd frontend
+npm install
+npm run dev
+```
 
 ## Requirements
 
 - Python 3.12+
+- Node.js 20+
 - Docker and Docker Compose (for containerized development)
 
 ## Installation
