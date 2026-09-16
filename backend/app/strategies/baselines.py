@@ -1,4 +1,5 @@
 import random
+from collections.abc import Callable
 from dataclasses import dataclass, field
 from decimal import Decimal
 
@@ -39,18 +40,23 @@ class BaselineStrategyParameters:
 @dataclass(frozen=True)
 class BaselineStrategy:
     name: str
-    strategy: Strategy
+    strategy_factory: Callable[[], Strategy]
+
+    @property
+    def strategy(self) -> Strategy:
+        """Create a strategy for callers of the original baseline definition interface."""
+        return self.strategy_factory()
 
 
 def build_baseline_strategies(
     parameters: BaselineStrategyParameters,
 ) -> tuple[BaselineStrategy, ...]:
-    """Create fresh strategy state so every baseline receives the same bar period and costs."""
+    """Create factories so every baseline competition receives fresh strategy state."""
     return (
-        BaselineStrategy("buy_and_hold", BuyAndHoldStrategy(parameters.quantity)),
+        BaselineStrategy("buy_and_hold", lambda: BuyAndHoldStrategy(parameters.quantity)),
         BaselineStrategy(
             "moving_average_crossover",
-            MovingAverageCrossoverStrategy(
+            lambda: MovingAverageCrossoverStrategy(
                 parameters.quantity,
                 fast_window=parameters.fast_window,
                 slow_window=parameters.slow_window,
@@ -58,7 +64,7 @@ def build_baseline_strategies(
         ),
         BaselineStrategy(
             "rsi_mean_reversion",
-            RsiMeanReversionStrategy(
+            lambda: RsiMeanReversionStrategy(
                 parameters.quantity,
                 window=parameters.rsi_window,
                 oversold=parameters.rsi_oversold,
@@ -67,11 +73,11 @@ def build_baseline_strategies(
         ),
         BaselineStrategy(
             "momentum",
-            MomentumStrategy(parameters.quantity, window=parameters.momentum_window),
+            lambda: MomentumStrategy(parameters.quantity, window=parameters.momentum_window),
         ),
         BaselineStrategy(
             "random",
-            RandomStrategy(
+            lambda: RandomStrategy(
                 parameters.quantity,
                 seed=parameters.random_seed,
                 action_probability=parameters.random_action_probability,

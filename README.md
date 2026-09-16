@@ -1,12 +1,12 @@
 # Alyntiq
 
 Alyntiq is a professional AI-powered quantitative research and paper-trading platform.
-Phases 0 through 15 are complete: foundation, historical market data, exploratory data
+Phases 0 through 16 are complete: foundation, historical market data, exploratory data
 analysis, feature engineering, target generation, baseline-model evaluation, and
 advanced-model evaluation, the historical backtesting engine, baseline strategies, the ML
 threshold strategy, an independent pre-trade risk engine, multi-asset portfolio accounting,
-and a paper-only Alpaca broker adapter, real-time Alpaca minute-bar consumption, and a
-trading-decision audit trail.
+and a paper-only Alpaca broker adapter, real-time Alpaca minute-bar consumption, a
+trading-decision audit trail, and isolated historical strategy competition.
 
 The intended long-term flow is:
 
@@ -16,8 +16,8 @@ Historical market-data ingestion, versioned feature and target generation, walk-
 model evaluation, a historical backtesting engine, comparable baseline strategies, and
 versioned ML trading proposals, explicit historical risk decisions, and multi-asset
 portfolio valuation, a tightly scoped paper-broker interface, ordered real-time bar
-consumption, and decision-to-execution audit records are available. Live broker execution
-is not implemented.
+consumption, decision-to-execution audit records, and isolated historical strategy
+competition are available. Live broker execution is not implemented.
 
 ## Safety
 

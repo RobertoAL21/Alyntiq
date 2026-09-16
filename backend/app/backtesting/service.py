@@ -4,9 +4,15 @@ from datetime import date
 
 from sqlalchemy.orm import Session
 
-from app.backtesting.engine import BacktestEngine
+from app.backtesting.competition import (
+    StrategyCompetitionEntry,
+    StrategyCompetitionService,
+    StrategyCompetitor,
+    VirtualPortfolioRun,
+)
+from app.backtesting.competition import build_strategy_leaderboard as _build_strategy_leaderboard
 from app.backtesting.repository import BacktestDataError, BacktestDataset, load_backtest_dataset
-from app.backtesting.types import BacktestConfig, BacktestResult
+from app.backtesting.types import BacktestConfig
 from app.strategies.baselines import BaselineStrategyParameters, build_baseline_strategies
 
 logger = logging.getLogger(__name__)
@@ -16,21 +22,9 @@ class BaselineStrategyComparisonError(ValueError):
     """Raised when Phase 8 strategies cannot be compared on one historical dataset."""
 
 
-@dataclass(frozen=True)
-class BaselineStrategyRun:
-    strategy_name: str
-    result: BacktestResult
-
-
-@dataclass(frozen=True)
-class StrategyComparisonEntry:
-    rank: int
-    strategy_name: str
-    total_return: float
-    sharpe_ratio: float | None
-    sortino_ratio: float | None
-    max_drawdown: float
-    number_of_trades: int
+BaselineStrategyRun = VirtualPortfolioRun
+StrategyComparisonEntry = StrategyCompetitionEntry
+build_strategy_leaderboard = _build_strategy_leaderboard
 
 
 @dataclass(frozen=True)
@@ -68,14 +62,14 @@ class BaselineStrategyComparisonService:
         except BacktestDataError as error:
             raise BaselineStrategyComparisonError(str(error)) from error
 
-        runs = tuple(
-            BaselineStrategyRun(
-                strategy_name=definition.name,
-                result=BacktestEngine(config).run(dataset.bars, definition.strategy),
-            )
-            for definition in build_baseline_strategies(strategy_parameters)
+        competition = StrategyCompetitionService().run(
+            dataset.bars,
+            config=config,
+            competitors=tuple(
+                StrategyCompetitor(definition.name, definition.strategy_factory)
+                for definition in build_baseline_strategies(strategy_parameters)
+            ),
         )
-        leaderboard = build_strategy_leaderboard(runs)
         logger.info(
             "baseline_strategies_compared",
             extra={
@@ -85,35 +79,12 @@ class BaselineStrategyComparisonService:
                 "start": dataset.start.isoformat(),
                 "end": dataset.end.isoformat(),
                 "bar_count": len(dataset.bars),
-                "strategy_count": len(runs),
+                "strategy_count": len(competition.runs),
             },
         )
         return BaselineStrategyComparison(
             dataset=dataset,
             config=config,
-            runs=runs,
-            leaderboard=leaderboard,
+            runs=competition.runs,
+            leaderboard=competition.leaderboard,
         )
-
-
-def build_strategy_leaderboard(
-    runs: tuple[BaselineStrategyRun, ...],
-) -> tuple[StrategyComparisonEntry, ...]:
-    """Rank baselines by total return while retaining risk and activity metrics for context."""
-    ordered_runs = sorted(
-        runs,
-        key=lambda run: (run.result.metrics.total_return, run.strategy_name),
-        reverse=True,
-    )
-    return tuple(
-        StrategyComparisonEntry(
-            rank=index,
-            strategy_name=run.strategy_name,
-            total_return=run.result.metrics.total_return,
-            sharpe_ratio=run.result.metrics.sharpe_ratio,
-            sortino_ratio=run.result.metrics.sortino_ratio,
-            max_drawdown=run.result.metrics.max_drawdown,
-            number_of_trades=run.result.metrics.number_of_trades,
-        )
-        for index, run in enumerate(ordered_runs, start=1)
-    )

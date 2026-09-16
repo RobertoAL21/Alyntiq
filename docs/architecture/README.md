@@ -18,6 +18,7 @@ execution-engine.md
 realtime-market-data.md
 trading-audit-trail.md
 frontend-dashboard.md
+strategy-competition.md
 
 Potential future documents:
 

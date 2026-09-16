@@ -2,7 +2,7 @@ Alyntiq — Current Phase
 
 Current Phase
 
-Phase 16 — Strategy Competition
+Phase 17 — Market Regime Detection
 
 Status
 
@@ -10,28 +10,26 @@ NOT STARTED
 
 Objective
 
-Compare strategies under identical starting capital using independent virtual portfolios.
+Classify market conditions for use by later research and strategy work.
 
 Current Phase Document
 
 Read:
 
-docs/phases/PHASE_16_STRATEGY_COMPETITION.md
+docs/phases/PHASE_17_MARKET_REGIMES.md
 
 Current Scope
 
-* independent virtual portfolios
-* shared initial capital and comparison assumptions
-* strategy performance comparison
+* market-regime research and classification
 
 Explicitly Out of Scope
 
-* market-regime, NLP, deep-learning, model-registry, drift, observability, deployment, and CI/CD work
+* NLP, deep-learning, model-registry, drift, observability, deployment, and CI/CD work
 
 Phase Completion
 
-When Phase 16 is complete:
+When Phase 17 is complete:
 
 1. Change status to COMPLETE and record relevant architecture decisions.
-2. Change this file to Phase 17.
+2. Change this file to Phase 18.
 3. Do not delete the completed phase documentation.
