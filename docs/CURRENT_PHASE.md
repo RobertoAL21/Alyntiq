@@ -2,7 +2,7 @@ Alyntiq — Current Phase
 
 Current Phase
 
-Phase 17 — Market Regime Detection
+Phase 18 — News and NLP
 
 Status
 
@@ -10,26 +10,26 @@ NOT STARTED
 
 Objective
 
-Classify market conditions for use by later research and strategy work.
+Transform financial news into structured signals for research and later strategy context.
 
 Current Phase Document
 
 Read:
 
-docs/phases/PHASE_17_MARKET_REGIMES.md
+docs/phases/PHASE_18_NEWS_NLP.md
 
 Current Scope
 
-* market-regime research and classification
+* news deduplication, entity extraction, ticker mapping, and structured NLP signals
 
 Explicitly Out of Scope
 
-* NLP, deep-learning, model-registry, drift, observability, deployment, and CI/CD work
+* deep-learning, model-registry, drift, observability, deployment, and CI/CD work
 
 Phase Completion
 
-When Phase 17 is complete:
+When Phase 18 is complete:
 
 1. Change status to COMPLETE and record relevant architecture decisions.
-2. Change this file to Phase 18.
+2. Change this file to Phase 19.
 3. Do not delete the completed phase documentation.

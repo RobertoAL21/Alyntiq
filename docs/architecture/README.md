@@ -19,6 +19,7 @@ realtime-market-data.md
 trading-audit-trail.md
 frontend-dashboard.md
 strategy-competition.md
+market-regimes.md
 
 Potential future documents:
 
