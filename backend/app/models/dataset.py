@@ -22,12 +22,15 @@ class TrainingDataset:
     target: pd.Series
     timestamps: pd.Series
     metadata: DatasetMetadata
+    symbols: pd.Series | None = None
 
     def __post_init__(self) -> None:
         if len(self.features) != len(self.target) or len(self.target) != len(self.timestamps):
             raise ValueError("features, target, and timestamps must have equal lengths")
         if self.target.isna().any():
             raise ValueError("training targets must not contain null values")
+        if self.symbols is not None and len(self.symbols) != len(self.features):
+            raise ValueError("symbols must have the same length as features")
 
     @property
     def row_count(self) -> int:

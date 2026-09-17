@@ -62,4 +62,5 @@ def load_training_dataset(
         target=frame["direction_1d"].astype(bool),
         timestamps=pd.to_datetime(frame["timestamp"], utc=True),
         metadata=metadata,
+        symbols=frame["symbol"].astype(str),
     )

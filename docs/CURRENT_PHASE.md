@@ -2,7 +2,7 @@ Alyntiq — Current Phase
 
 Current Phase
 
-Phase 20 — Advanced Time-Series Models
+Phase 21 — Model Registry
 
 Status
 
@@ -10,26 +10,28 @@ NOT STARTED
 
 Objective
 
-Evaluate advanced deep-learning time-series models against simpler baselines.
+Introduce explicit model lifecycle states and provenance for paper-trading eligibility.
 
 Current Phase Document
 
 Read:
 
-docs/phases/PHASE_20_DEEP_LEARNING.md
+docs/phases/PHASE_21_MODEL_REGISTRY.md
 
 Current Scope
 
-* LSTM, GRU, temporal CNN, and Transformer time-series research
+* candidate, staging, production, and retired model states
+* model dataset, feature, target, parameter, metric, backtest, and artifact provenance
+* production-only eligibility for paper trading
 
 Explicitly Out of Scope
 
-* model-registry, drift, observability, deployment, and CI/CD work
+* drift monitoring, observability, deployment, and CI/CD work
 
 Phase Completion
 
-When Phase 20 is complete:
+When Phase 21 is complete:
 
 1. Change status to COMPLETE and record relevant architecture decisions.
-2. Change this file to Phase 21.
+2. Change this file to Phase 22.
 3. Do not delete the completed phase documentation.

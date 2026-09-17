@@ -22,6 +22,7 @@ strategy-competition.md
 market-regimes.md
 news-nlp.md
 hybrid-strategy.md
+deep-learning.md
 
 Potential future documents:
 

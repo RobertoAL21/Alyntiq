@@ -1,5 +1,8 @@
+from __future__ import annotations
+
 import json
 from dataclasses import asdict
+from typing import TYPE_CHECKING
 
 import mlflow
 from mlflow import MlflowClient
@@ -7,6 +10,13 @@ from mlflow import MlflowClient
 from app.models.advanced_types import AdvancedModelRunResult, LeaderboardEntry
 from app.models.dataset import DatasetMetadata
 from app.models.service_types import BaselineRunResult
+
+if TYPE_CHECKING:
+    from app.models.deep_learning import DeepLearningConfig
+    from app.models.deep_learning_service import (
+        DeepLearningLeaderboardEntry,
+        DeepLearningRunResult,
+    )
 
 
 class MlflowTracker:
@@ -102,6 +112,80 @@ class MlflowTracker:
             )
             mlflow.log_dict(
                 {"entries": [asdict(entry) for entry in leaderboard]}, "leaderboard.json"
+            )
+
+    def log_deep_learning(
+        self,
+        result: DeepLearningRunResult,
+        metadata: DatasetMetadata,
+        config: DeepLearningConfig,
+    ) -> None:
+        """Record temporal-model validation provenance and its untouched holdout."""
+        self._configure_experiment()
+        with mlflow.start_run(run_name=result.model_name):
+            mlflow.log_params(
+                {
+                    "model_name": result.model_name,
+                    "model_family": result.model_family,
+                    "model_version": result.model_version,
+                    "dataset_version": metadata.dataset_version,
+                    "feature_version": metadata.feature_version,
+                    "target_version": metadata.target_version,
+                    "source": metadata.source,
+                    "timeframe": metadata.timeframe,
+                    "sequence_count": result.sequence_count,
+                    **asdict(config),
+                }
+            )
+            for fold in result.validation_folds:
+                mlflow.log_metrics(
+                    {
+                        f"validation_{key}": value
+                        for key, value in fold.metrics.as_dict().items()
+                        if value is not None
+                    },
+                    step=fold.number,
+                )
+            mlflow.log_metrics(
+                {
+                    f"mean_validation_{key}": value
+                    for key, value in result.mean_validation_metrics.as_dict().items()
+                    if value is not None
+                }
+            )
+            mlflow.log_metrics(
+                {
+                    f"holdout_{key}": value
+                    for key, value in result.holdout.metrics.as_dict().items()
+                    if value is not None
+                }
+            )
+            mlflow.log_text(
+                json.dumps(asdict(result), default=str, indent=2), "deep_learning_result.json"
+            )
+
+    def log_deep_learning_leaderboard(
+        self,
+        leaderboard: tuple[DeepLearningLeaderboardEntry, ...],
+        metadata: DatasetMetadata,
+        model_version: str,
+    ) -> None:
+        """Persist the temporal-model holdout comparison as an MLflow artifact."""
+        self._configure_experiment()
+        with mlflow.start_run(run_name="deep_learning_leaderboard"):
+            mlflow.log_params(
+                {
+                    "model_version": model_version,
+                    "dataset_version": metadata.dataset_version,
+                    "feature_version": metadata.feature_version,
+                    "target_version": metadata.target_version,
+                    "source": metadata.source,
+                    "timeframe": metadata.timeframe,
+                }
+            )
+            mlflow.log_dict(
+                {"entries": [asdict(entry) for entry in leaderboard]},
+                "deep_learning_leaderboard.json",
             )
 
     def _configure_experiment(self) -> None:

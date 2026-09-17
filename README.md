@@ -1,13 +1,14 @@
 # Alyntiq
 
 Alyntiq is a professional AI-powered quantitative research and paper-trading platform.
-Phases 0 through 19 are complete: foundation, historical market data, exploratory data
+Phases 0 through 20 are complete: foundation, historical market data, exploratory data
 analysis, feature engineering, target generation, baseline-model evaluation, and
 advanced-model evaluation, the historical backtesting engine, baseline strategies, the ML
 threshold strategy, an independent pre-trade risk engine, multi-asset portfolio accounting,
 and a paper-only Alpaca broker adapter, real-time Alpaca minute-bar consumption, a
 trading-decision audit trail, isolated historical strategy competition, and descriptive
-market-regime research, structured news research signals, and hybrid strategy comparison.
+market-regime research, structured news research signals, hybrid strategy comparison, and
+deep-learning time-series research.
 
 The intended long-term flow is:
 
@@ -18,8 +19,9 @@ model evaluation, a historical backtesting engine, comparable baseline strategie
 versioned ML trading proposals, explicit historical risk decisions, and multi-asset
 portfolio valuation, a tightly scoped paper-broker interface, ordered real-time bar
 consumption, decision-to-execution audit records, isolated historical strategy
-competition, descriptive market-regime research, structured news research signals, and
-hybrid strategy comparison are available. Live broker execution is not implemented.
+competition, descriptive market-regime research, structured news research signals, hybrid
+strategy comparison, and reproducible deep-learning predictive comparison are available.
+Live broker execution is not implemented.
 
 ## Safety
 
@@ -31,7 +33,7 @@ The FastAPI application is in `backend/app`. The HTTP layer is isolated in `api/
 runtime settings and JSON structured logging are in `core/`, SQLAlchemy/Alembic
 infrastructure is in `db/`, historical market-data ingestion is in `market_data/`,
 point-in-time transformations are in `features/`, labels are in `targets/`, and baseline
-and advanced-model evaluation are in `models/`. PostgreSQL, Redis, and a persistent
+advanced-model and temporal deep-learning evaluation are in `models/`. PostgreSQL, Redis, and a persistent
 local MLflow store are provisioned with Docker Compose for local development. The pure,
 in-memory historical simulator is isolated in `backtesting/`. Independent pre-trade risk
 evaluation is isolated in `risk/`, multi-asset portfolio accounting is isolated in
@@ -172,6 +174,31 @@ python -m scripts.run_advanced_models \
 MLflow records the selected parameters, validation score, holdout metrics, trial history,
 feature importance, and leaderboard. The output compares prediction quality only; it is
 not a backtest, trading signal, or financial advice.
+
+## Deep-learning time-series evaluation
+
+Phase 20 adds fixed CPU PyTorch LSTM, GRU, temporal CNN, and Transformer classifiers.
+Each model consumes symbol-local trailing windows of versioned features, uses the existing
+expanding walk-forward evaluation with its next-day target gap, and is compared once on a
+reserved final holdout with the existing random, majority-class, logistic-regression, and
+decision-tree baselines.
+
+```bash
+python -m scripts.run_deep_learning_models \
+  --source alpaca:iex:raw \
+  --timeframe 1D \
+  --feature-version features-v1 \
+  --target-version targets-v1 \
+  --dataset-version dataset-v1 \
+  --n-splits 3 \
+  --gap 1 \
+  --lookback 20 \
+  --epochs 10
+```
+
+MLflow records the temporal configuration, data lineage, validation evidence, untouched
+holdout metrics, per-model artifacts, and leaderboard. The result is a predictive-research
+comparison; it does not register, serve, or execute a model.
 
 ## Historical backtesting engine
 
