@@ -14,6 +14,7 @@ Implemented decisions also include:
 017-run-strategy-competitions-with-isolated-fresh-backtests.md
 018-keep-market-regimes-descriptive-and-training-period-bound.md
 019-keep-news-analysis-structured-and-trade-independent.md
+020-compose-hybrid-strategies-from-point-in-time-context.md
 
 Each ADR should contain:
 

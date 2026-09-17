@@ -21,6 +21,7 @@ frontend-dashboard.md
 strategy-competition.md
 market-regimes.md
 news-nlp.md
+hybrid-strategy.md
 
 Potential future documents:
 

@@ -89,7 +89,7 @@ def select_thresholds(
             correct = 0
             action_count = 0
             for validation_prediction in validation_predictions:
-                side = _classify_probability(
+                side = classify_probability(
                     validation_prediction.prediction.up_probability,
                     sell_threshold=sell_threshold,
                     buy_threshold=buy_threshold,
@@ -131,7 +131,7 @@ class MLThresholdStrategy:
             return None
         if prediction.symbol != bar.symbol:
             raise MLStrategyError("prediction symbol must match the backtest bar symbol")
-        side = _classify_probability(
+        side = classify_probability(
             prediction.up_probability,
             sell_threshold=self.thresholds.sell_threshold,
             buy_threshold=self.thresholds.buy_threshold,
@@ -149,7 +149,7 @@ class MLThresholdStrategy:
         return None
 
 
-def _classify_probability(
+def classify_probability(
     probability: float,
     *,
     sell_threshold: float,

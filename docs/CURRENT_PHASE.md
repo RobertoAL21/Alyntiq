@@ -2,7 +2,7 @@ Alyntiq — Current Phase
 
 Current Phase
 
-Phase 19 — Hybrid Strategy
+Phase 20 — Advanced Time-Series Models
 
 Status
 
@@ -10,26 +10,26 @@ NOT STARTED
 
 Objective
 
-Combine existing research inputs into comparable hybrid strategies.
+Evaluate advanced deep-learning time-series models against simpler baselines.
 
 Current Phase Document
 
 Read:
 
-docs/phases/PHASE_19_HYBRID_STRATEGY.md
+docs/phases/PHASE_20_DEEP_LEARNING.md
 
 Current Scope
 
-* quantitative features, ML predictions, market regimes, and news sentiment in strategies
+* LSTM, GRU, temporal CNN, and Transformer time-series research
 
 Explicitly Out of Scope
 
-* deep-learning, model-registry, drift, observability, deployment, and CI/CD work
+* model-registry, drift, observability, deployment, and CI/CD work
 
 Phase Completion
 
-When Phase 19 is complete:
+When Phase 20 is complete:
 
 1. Change status to COMPLETE and record relevant architecture decisions.
-2. Change this file to Phase 20.
+2. Change this file to Phase 21.
 3. Do not delete the completed phase documentation.
