@@ -9,6 +9,7 @@ from app.db.models import (  # noqa: F401
     MarketBar,
     MarketFeature,
     MarketTarget,
+    ModelRegistryRecord,
     TradingDecisionRecord,
 )
 

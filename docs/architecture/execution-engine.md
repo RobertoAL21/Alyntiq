@@ -42,9 +42,11 @@ error for network, HTTP, or malformed-response failures without exposing credent
 
 `broker_order_from_risk_decision` converts only an approved `RiskDecision` with a modified
 order into a `BrokerOrderRequest`. `submit_approved_order` invokes an injected broker with
-that request. This is the project-facing path from strategy/risk to a broker and keeps
-strategy proposals separate from risk approval and broker calls. Neither function is invoked
-by FastAPI or a background worker in Phase 12.
+that request. For a decision with model lineage, it additionally requires the Phase 21
+model-registry gate and permits only a `production` model before contacting the broker.
+This preserves the project-facing strategy -> risk -> execution path without allowing a
+strategy, model, or registry to bypass independent risk approval. Neither function is
+invoked by FastAPI or a background worker.
 
 ## Verification
 

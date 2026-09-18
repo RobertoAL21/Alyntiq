@@ -2,7 +2,7 @@ Alyntiq — Current Phase
 
 Current Phase
 
-Phase 21 — Model Registry
+Phase 22 — Observability
 
 Status
 
@@ -10,28 +10,29 @@ NOT STARTED
 
 Objective
 
-Introduce explicit model lifecycle states and provenance for paper-trading eligibility.
+Add operational visibility for the existing research and paper-trading components.
 
 Current Phase Document
 
 Read:
 
-docs/phases/PHASE_21_MODEL_REGISTRY.md
+docs/phases/PHASE_22_OBSERVABILITY.md
 
 Current Scope
 
-* candidate, staging, production, and retired model states
-* model dataset, feature, target, parameter, metric, backtest, and artifact provenance
-* production-only eligibility for paper trading
+* prediction and trade volume, rejected trades, API and model latency
+* ingestion failures and WebSocket reconnects
+* portfolio drawdown and PnL telemetry
+* OpenTelemetry instrumentation research
 
 Explicitly Out of Scope
 
-* drift monitoring, observability, deployment, and CI/CD work
+* drift detection, deployment, and CI/CD work
 
 Phase Completion
 
-When Phase 21 is complete:
+When Phase 22 is complete:
 
 1. Change status to COMPLETE and record relevant architecture decisions.
-2. Change this file to Phase 22.
+2. Change this file to Phase 23.
 3. Do not delete the completed phase documentation.

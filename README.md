@@ -1,14 +1,14 @@
 # Alyntiq
 
 Alyntiq is a professional AI-powered quantitative research and paper-trading platform.
-Phases 0 through 20 are complete: foundation, historical market data, exploratory data
+Phases 0 through 21 are complete: foundation, historical market data, exploratory data
 analysis, feature engineering, target generation, baseline-model evaluation, and
 advanced-model evaluation, the historical backtesting engine, baseline strategies, the ML
 threshold strategy, an independent pre-trade risk engine, multi-asset portfolio accounting,
 and a paper-only Alpaca broker adapter, real-time Alpaca minute-bar consumption, a
 trading-decision audit trail, isolated historical strategy competition, and descriptive
 market-regime research, structured news research signals, hybrid strategy comparison, and
-deep-learning time-series research.
+deep-learning time-series research, and model lifecycle registry controls.
 
 The intended long-term flow is:
 
@@ -21,7 +21,9 @@ portfolio valuation, a tightly scoped paper-broker interface, ordered real-time 
 consumption, decision-to-execution audit records, isolated historical strategy
 competition, descriptive market-regime research, structured news research signals, hybrid
 strategy comparison, and reproducible deep-learning predictive comparison are available.
-Live broker execution is not implemented.
+Model versions can now be registered with evaluation provenance and promoted through an
+explicit lifecycle before model-driven paper orders. Live broker execution is not
+implemented.
 
 ## Safety
 
@@ -32,8 +34,10 @@ Alyntiq is currently for research, backtesting, and paper trading only. `TRADING
 The FastAPI application is in `backend/app`. The HTTP layer is isolated in `api/`,
 runtime settings and JSON structured logging are in `core/`, SQLAlchemy/Alembic
 infrastructure is in `db/`, historical market-data ingestion is in `market_data/`,
-point-in-time transformations are in `features/`, labels are in `targets/`, and baseline
-advanced-model and temporal deep-learning evaluation are in `models/`. PostgreSQL, Redis, and a persistent
+point-in-time transformations are in `features/`, labels are in `targets/`, and baseline,
+advanced-model, and temporal deep-learning evaluation are in `models/`. The independent
+`model_registry/` package owns model lifecycle records and paper-order eligibility.
+PostgreSQL, Redis, and a persistent
 local MLflow store are provisioned with Docker Compose for local development. The pure,
 in-memory historical simulator is isolated in `backtesting/`. Independent pre-trade risk
 evaluation is isolated in `risk/`, multi-asset portfolio accounting is isolated in

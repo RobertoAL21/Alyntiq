@@ -16,6 +16,7 @@ Implemented decisions also include:
 019-keep-news-analysis-structured-and-trade-independent.md
 020-compose-hybrid-strategies-from-point-in-time-context.md
 021-evaluate-temporal-models-with-symbol-local-windows.md
+022-require-production-registry-state-for-model-paper-orders.md
 
 Each ADR should contain:
 

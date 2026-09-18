@@ -23,6 +23,7 @@ market-regimes.md
 news-nlp.md
 hybrid-strategy.md
 deep-learning.md
+model-registry.md
 
 Potential future documents:
 

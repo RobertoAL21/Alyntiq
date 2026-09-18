@@ -1,8 +1,17 @@
 from decimal import Decimal
+from typing import Protocol
+
+from sqlalchemy.orm import Session
 
 from app.execution.broker import BrokerInterface
 from app.execution.types import BrokerOrder, BrokerOrderRequest, BrokerSide
 from app.risk.types import RiskDecision
+
+
+class PaperTradingModelGate(Protocol):
+    """Registry contract required before a model-driven paper order can reach a broker."""
+
+    def require_paper_trading_eligibility(self, session: Session, model_version: str) -> object: ...
 
 
 def broker_order_from_risk_decision(
@@ -25,8 +34,17 @@ def submit_approved_order(
     decision: RiskDecision,
     *,
     client_order_id: str | None = None,
+    model_gate: PaperTradingModelGate | None = None,
+    session: Session | None = None,
 ) -> BrokerOrder:
-    """Submit an explicitly risk-approved order through the injected paper broker."""
+    """Submit an approved order, allowing model lineage only after registry approval."""
+    lineage = decision.original_order.lineage
+    if lineage is not None:
+        if model_gate is None or session is None:
+            raise ValueError(
+                "model-driven paper execution requires a model registry gate and session"
+            )
+        model_gate.require_paper_trading_eligibility(session, lineage.model_version)
     return broker.submit_order(
         broker_order_from_risk_decision(decision, client_order_id=client_order_id)
     )
