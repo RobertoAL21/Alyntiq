@@ -2,7 +2,7 @@ Alyntiq — Current Phase
 
 Current Phase
 
-Phase 23 — Data and Model Drift
+Phase 24 — Deployment
 
 Status
 
@@ -10,28 +10,27 @@ NOT STARTED
 
 Objective
 
-Compare training and live distributions to identify feature and model drift.
+Create production-ready Docker images without embedding secrets.
 
 Current Phase Document
 
 Read:
 
-docs/phases/PHASE_23_DRIFT.md
+docs/phases/PHASE_24_DEPLOYMENT.md
 
 Current Scope
 
-* feature and prediction-distribution drift
-* volatility and market-regime changes
-* drift alerts
+* production-ready Docker images
+* deployment architecture documentation
 
 Explicitly Out of Scope
 
-* deployment and CI/CD work
+* CI/CD work
 
 Phase Completion
 
-When Phase 23 is complete:
+When Phase 24 is complete:
 
 1. Change status to COMPLETE and record relevant architecture decisions.
-2. Change this file to Phase 24.
+2. Change this file to Phase 25.
 3. Do not delete the completed phase documentation.

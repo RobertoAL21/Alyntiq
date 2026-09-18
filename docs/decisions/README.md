@@ -18,6 +18,7 @@ Implemented decisions also include:
 021-evaluate-temporal-models-with-symbol-local-windows.md
 022-require-production-registry-state-for-model-paper-orders.md
 023-use-opentelemetry-with-optional-otlp-export.md
+024-detect-drift-against-fixed-reference-samples.md
 
 Each ADR should contain:
 
