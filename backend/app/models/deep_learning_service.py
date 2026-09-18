@@ -1,5 +1,6 @@
 import logging
 from dataclasses import dataclass
+from time import perf_counter
 
 import numpy as np
 import pandas as pd
@@ -23,6 +24,7 @@ from app.models.validation import (
     WalkForwardValidationError,
     expanding_window_splits,
 )
+from app.observability.telemetry import get_telemetry
 
 DEEP_LEARNING_MODEL_VERSION = "temporal-v1"
 
@@ -154,6 +156,7 @@ def _evaluate_definition(
             sequences,
             fold,
             config=config,
+            model_version=model_version,
             random_state=config.random_state + (definition_number * 1_000) + fold.number,
         )
         for fold in validation_folds
@@ -163,6 +166,7 @@ def _evaluate_definition(
         sequences,
         holdout_fold,
         config=config,
+        model_version=model_version,
         random_state=config.random_state + (definition_number * 1_000) + holdout_fold.number,
     )
     return DeepLearningRunResult(
@@ -190,6 +194,7 @@ def _evaluate_baseline_definition(
             definition,
             sequences,
             fold,
+            model_version=model_version,
             random_state=random_state + fold.number,
         )
         for fold in validation_folds
@@ -198,6 +203,7 @@ def _evaluate_baseline_definition(
         definition,
         sequences,
         holdout_fold,
+        model_version=model_version,
         random_state=random_state + holdout_fold.number,
     )
     return DeepLearningRunResult(
@@ -217,6 +223,7 @@ def _evaluate_fold(
     fold: WalkForwardFold,
     *,
     config: DeepLearningConfig,
+    model_version: str,
     random_state: int,
 ) -> FoldResult:
     classifier = TorchTemporalClassifier(definition, config)
@@ -225,7 +232,14 @@ def _evaluate_fold(
     test_sequences = sequences.sequences[fold.test_indices]
     test_targets = sequences.targets[fold.test_indices]
     classifier.fit(train_sequences, train_targets, random_state=random_state)
+    prediction_started_at = perf_counter()
     probabilities = classifier.predict_proba(test_sequences)
+    get_telemetry().record_prediction(
+        model_name=definition.name,
+        model_version=model_version,
+        count=len(probabilities),
+        duration_seconds=perf_counter() - prediction_started_at,
+    )
     return FoldResult(
         number=fold.number,
         train_rows=len(train_sequences),
@@ -239,6 +253,7 @@ def _evaluate_baseline_fold(
     sequences: TemporalSequenceDataset,
     fold: WalkForwardFold,
     *,
+    model_version: str,
     random_state: int,
 ) -> FoldResult:
     """Evaluate an existing simple model on each window's latest feature observation."""
@@ -249,7 +264,14 @@ def _evaluate_baseline_fold(
     test_features = features[fold.test_indices]
     test_target = pd.Series(sequences.targets[fold.test_indices].astype(bool))
     model.fit(training_features, training_target)
+    prediction_started_at = perf_counter()
     probabilities = model.predict_proba(test_features)[:, 1]
+    get_telemetry().record_prediction(
+        model_name=f"baseline_{definition.name}",
+        model_version=model_version,
+        count=len(probabilities),
+        duration_seconds=perf_counter() - prediction_started_at,
+    )
     return FoldResult(
         number=fold.number,
         train_rows=len(training_features),

@@ -18,6 +18,7 @@ from app.backtesting.types import (
     Strategy,
     Trade,
 )
+from app.observability.telemetry import get_telemetry
 from app.risk.engine import RiskEngine
 from app.risk.types import ProposedOrder, RiskContext
 
@@ -103,7 +104,7 @@ class BacktestEngine:
                 status=OrderStatus.CANCELLED,
                 rejection_reason="no subsequent market bar is available for execution",
             )
-        return BacktestResult(
+        result = BacktestResult(
             config=self._config,
             portfolio=portfolio,
             orders=tuple(orders),
@@ -112,6 +113,12 @@ class BacktestEngine:
             equity_curve=tuple(equity_curve),
             metrics=calculate_backtest_metrics(equity_curve, trades, self._config),
         )
+        get_telemetry().record_portfolio_snapshot(
+            portfolio_id=f"backtest:{bars[0].symbol}",
+            pnl=result.equity_curve[-1].equity - self._config.initial_cash,
+            drawdown=Decimal(str(result.metrics.max_drawdown)),
+        )
+        return result
 
     def _execute_pending_order(
         self,

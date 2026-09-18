@@ -2,6 +2,7 @@ from dataclasses import replace
 from decimal import ROUND_FLOOR, Decimal
 
 from app.backtesting.types import SignalSide
+from app.observability.telemetry import get_telemetry
 from app.risk.types import ProposedOrder, RiskContext, RiskDecision, RiskLimits, RiskRule
 
 
@@ -18,8 +19,13 @@ class RiskEngine:
             return _approved(proposal)
         rejection = self._buy_rejection(proposal, context)
         if rejection is not None:
+            get_telemetry().record_rejected_trade(reason=rejection.rule.value)
             return rejection
-        return self._limit_buy_quantity(proposal, context)
+        decision = self._limit_buy_quantity(proposal, context)
+        if not decision.approved:
+            assert decision.rule is not None
+            get_telemetry().record_rejected_trade(reason=decision.rule.value)
+        return decision
 
     def evaluate_protection(self, context: RiskContext) -> RiskDecision | None:
         """Create an approved risk-exit proposal when a configured stop or take-profit triggers."""

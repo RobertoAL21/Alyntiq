@@ -1,5 +1,6 @@
 import logging
 from dataclasses import dataclass
+from time import perf_counter
 
 import pandas as pd
 from sqlalchemy.orm import Session
@@ -11,6 +12,7 @@ from app.models.repository import TrainingDatasetError, load_training_dataset
 from app.models.service_types import BaselineRunResult, FoldResult
 from app.models.tracking import MlflowTracker
 from app.models.validation import WalkForwardValidationError, expanding_window_splits
+from app.observability.telemetry import get_telemetry
 
 logger = logging.getLogger(__name__)
 
@@ -88,7 +90,14 @@ class BaselineExperimentService:
             test_features = dataset.features.iloc[fold.test_indices]
             test_target = dataset.target.iloc[fold.test_indices]
             model.fit(training_features, training_target)
+            prediction_started_at = perf_counter()
             probabilities = model.predict_proba(test_features)[:, 1]
+            get_telemetry().record_prediction(
+                model_name=definition.name,
+                model_version=model_version,
+                count=len(probabilities),
+                duration_seconds=perf_counter() - prediction_started_at,
+            )
             fold_results.append(
                 FoldResult(
                     number=fold.number,

@@ -1,14 +1,15 @@
 # Alyntiq
 
 Alyntiq is a professional AI-powered quantitative research and paper-trading platform.
-Phases 0 through 21 are complete: foundation, historical market data, exploratory data
+Phases 0 through 22 are complete: foundation, historical market data, exploratory data
 analysis, feature engineering, target generation, baseline-model evaluation, and
 advanced-model evaluation, the historical backtesting engine, baseline strategies, the ML
 threshold strategy, an independent pre-trade risk engine, multi-asset portfolio accounting,
 and a paper-only Alpaca broker adapter, real-time Alpaca minute-bar consumption, a
 trading-decision audit trail, isolated historical strategy competition, and descriptive
 market-regime research, structured news research signals, hybrid strategy comparison, and
-deep-learning time-series research, and model lifecycle registry controls.
+deep-learning time-series research, model lifecycle registry controls, and OpenTelemetry
+observability instrumentation.
 
 The intended long-term flow is:
 
@@ -23,7 +24,8 @@ competition, descriptive market-regime research, structured news research signal
 strategy comparison, and reproducible deep-learning predictive comparison are available.
 Model versions can now be registered with evaluation provenance and promoted through an
 explicit lifecycle before model-driven paper orders. Live broker execution is not
-implemented.
+implemented. OpenTelemetry records operational metrics and can export to an optional OTLP
+collector; dashboards and alerting are not configured.
 
 ## Safety
 
@@ -37,6 +39,7 @@ infrastructure is in `db/`, historical market-data ingestion is in `market_data/
 point-in-time transformations are in `features/`, labels are in `targets/`, and baseline,
 advanced-model, and temporal deep-learning evaluation are in `models/`. The independent
 `model_registry/` package owns model lifecycle records and paper-order eligibility.
+The cross-cutting `observability/` package owns OpenTelemetry metrics and tracing setup.
 PostgreSQL, Redis, and a persistent
 local MLflow store are provisioned with Docker Compose for local development. The pure,
 in-memory historical simulator is isolated in `backtesting/`. Independent pre-trade risk
@@ -203,6 +206,21 @@ python -m scripts.run_deep_learning_models \
 MLflow records the temporal configuration, data lineage, validation evidence, untouched
 holdout metrics, per-model artifacts, and leaderboard. The result is a predictive-research
 comparison; it does not register, serve, or execute a model.
+
+## Observability
+
+Phase 22 instruments FastAPI and the existing model, risk, execution, market-data, and
+backtest paths with OpenTelemetry. Set an OTLP/HTTP collector base URL when one is
+available:
+
+```bash
+OTEL_EXPORTER_OTLP_ENDPOINT=http://localhost:4318
+OTEL_SERVICE_NAME=alyntiq-api
+```
+
+The application records API/model latency, prediction and trade volume, risk rejections,
+ingestion failures, WebSocket reconnects, and backtest PnL/drawdown snapshots. Prometheus,
+Grafana dashboards, alerting, and drift analysis are not configured in this phase.
 
 ## Historical backtesting engine
 

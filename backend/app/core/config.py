@@ -26,6 +26,8 @@ class Settings(BaseSettings):
     mlflow_tracking_uri: str = "sqlite:///mlruns/mlflow.db"
     mlflow_artifact_uri: str = "file:./mlruns/artifacts"
     mlflow_experiment_name: str = "alyntiq-baselines"
+    otel_service_name: str = "alyntiq-api"
+    otel_exporter_otlp_endpoint: str | None = None
 
 
 @lru_cache

@@ -7,6 +7,7 @@ from app.core.logging import configure_logging
 from app.db.session import SessionLocal
 from app.market_data.alpaca import AlpacaMarketDataProvider
 from app.market_data.service import HistoricalMarketDataIngestionService
+from app.observability.telemetry import configure_observability
 
 
 def parse_date(value: str) -> date:
@@ -39,8 +40,10 @@ def main() -> int:
         parser.error("--start must not be after --end")
 
     configure_logging()
+    settings = get_settings()
+    configure_observability(settings)
     try:
-        provider = AlpacaMarketDataProvider.from_settings(get_settings())
+        provider = AlpacaMarketDataProvider.from_settings(settings)
     except ValueError as error:
         parser.error(str(error))
 

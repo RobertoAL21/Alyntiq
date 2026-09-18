@@ -6,6 +6,7 @@ from app.core.logging import configure_logging
 from app.db.session import SessionLocal
 from app.models.advanced_service import AdvancedExperimentError, AdvancedExperimentService
 from app.models.tracking import MlflowTracker
+from app.observability.telemetry import configure_observability
 
 
 def build_parser() -> argparse.ArgumentParser:
@@ -29,6 +30,7 @@ def main() -> int:
     arguments = build_parser().parse_args()
     configure_logging()
     settings = get_settings()
+    configure_observability(settings)
     service = AdvancedExperimentService(
         MlflowTracker(
             settings.mlflow_tracking_uri,

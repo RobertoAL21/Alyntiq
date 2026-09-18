@@ -2,7 +2,7 @@ Alyntiq — Current Phase
 
 Current Phase
 
-Phase 22 — Observability
+Phase 23 — Data and Model Drift
 
 Status
 
@@ -10,29 +10,28 @@ NOT STARTED
 
 Objective
 
-Add operational visibility for the existing research and paper-trading components.
+Compare training and live distributions to identify feature and model drift.
 
 Current Phase Document
 
 Read:
 
-docs/phases/PHASE_22_OBSERVABILITY.md
+docs/phases/PHASE_23_DRIFT.md
 
 Current Scope
 
-* prediction and trade volume, rejected trades, API and model latency
-* ingestion failures and WebSocket reconnects
-* portfolio drawdown and PnL telemetry
-* OpenTelemetry instrumentation research
+* feature and prediction-distribution drift
+* volatility and market-regime changes
+* drift alerts
 
 Explicitly Out of Scope
 
-* drift detection, deployment, and CI/CD work
+* deployment and CI/CD work
 
 Phase Completion
 
-When Phase 22 is complete:
+When Phase 23 is complete:
 
 1. Change status to COMPLETE and record relevant architecture decisions.
-2. Change this file to Phase 23.
+2. Change this file to Phase 24.
 3. Do not delete the completed phase documentation.

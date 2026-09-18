@@ -5,6 +5,7 @@ from sqlalchemy.orm import Session
 
 from app.execution.broker import BrokerInterface
 from app.execution.types import BrokerOrder, BrokerOrderRequest, BrokerSide
+from app.observability.telemetry import get_telemetry
 from app.risk.types import RiskDecision
 
 
@@ -45,6 +46,8 @@ def submit_approved_order(
                 "model-driven paper execution requires a model registry gate and session"
             )
         model_gate.require_paper_trading_eligibility(session, lineage.model_version)
-    return broker.submit_order(
+    order = broker.submit_order(
         broker_order_from_risk_decision(decision, client_order_id=client_order_id)
     )
+    get_telemetry().record_trade(symbol=order.symbol, side=order.side.value)
+    return order

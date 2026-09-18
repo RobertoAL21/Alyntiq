@@ -11,6 +11,7 @@ from websockets.exceptions import ConnectionClosed
 
 from app.core.config import Settings
 from app.market_data.schemas import RealtimeBar
+from app.observability.telemetry import get_telemetry
 
 _LOGGER = logging.getLogger(__name__)
 _STREAM_BASE_URL = "wss://stream.data.alpaca.markets/v2"
@@ -111,6 +112,7 @@ class AlpacaRealtimeBarStream:
                     self._reconnect_initial_seconds * (2**reconnects), self._reconnect_max_seconds
                 )
                 reconnects += 1
+                get_telemetry().record_websocket_reconnect(feed=self._feed)
                 _LOGGER.warning(
                     "realtime_stream_reconnecting",
                     extra={

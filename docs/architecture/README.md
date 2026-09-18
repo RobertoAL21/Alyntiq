@@ -24,6 +24,7 @@ news-nlp.md
 hybrid-strategy.md
 deep-learning.md
 model-registry.md
+observability.md
 
 Potential future documents:
 

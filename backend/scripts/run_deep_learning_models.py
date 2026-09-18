@@ -12,6 +12,7 @@ from app.models.deep_learning_service import (
 )
 from app.models.repository import TrainingDatasetError, load_training_dataset
 from app.models.tracking import MlflowTracker
+from app.observability.telemetry import configure_observability
 
 
 def build_parser() -> argparse.ArgumentParser:
@@ -41,6 +42,7 @@ def main() -> int:
     arguments = build_parser().parse_args()
     configure_logging()
     settings = get_settings()
+    configure_observability(settings)
     try:
         config = DeepLearningConfig(
             lookback=arguments.lookback,

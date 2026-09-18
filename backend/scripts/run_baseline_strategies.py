@@ -7,8 +7,10 @@ from app.backtesting.service import (
     BaselineStrategyComparisonService,
 )
 from app.backtesting.types import BacktestConfig
+from app.core.config import get_settings
 from app.core.logging import configure_logging
 from app.db.session import SessionLocal
+from app.observability.telemetry import configure_observability
 from app.strategies.baselines import BaselineStrategyParameters
 from scripts.ingest_market_data import parse_date
 
@@ -80,6 +82,7 @@ def main() -> int:
         parser.error(str(error))
 
     configure_logging()
+    configure_observability(get_settings())
     try:
         with SessionLocal() as session:
             comparison = BaselineStrategyComparisonService().run(

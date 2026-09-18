@@ -7,6 +7,7 @@ from sqlalchemy.orm import Session
 from app.market_data.providers import MarketDataProvider
 from app.market_data.repository import StorageResult, store_historical_bars
 from app.market_data.validation import ValidationResult, validate_historical_bars
+from app.observability.telemetry import get_telemetry
 
 logger = logging.getLogger(__name__)
 
@@ -31,9 +32,13 @@ class HistoricalMarketDataIngestionService:
         end: date,
         timeframe: str = "1D",
     ) -> IngestionResult:
-        bars = self._provider.get_historical_bars(symbol, start, end, timeframe)
-        validation = validate_historical_bars(bars)
-        storage = store_historical_bars(session, bars)
+        try:
+            bars = self._provider.get_historical_bars(symbol, start, end, timeframe)
+            validation = validate_historical_bars(bars)
+            storage = store_historical_bars(session, bars)
+        except Exception:
+            get_telemetry().record_ingestion_failure(source=type(self._provider).__name__)
+            raise
 
         logger.info(
             "historical_market_data_ingested",
