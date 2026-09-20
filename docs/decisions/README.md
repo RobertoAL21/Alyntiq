@@ -19,6 +19,7 @@ Implemented decisions also include:
 022-require-production-registry-state-for-model-paper-orders.md
 023-use-opentelemetry-with-optional-otlp-export.md
 024-detect-drift-against-fixed-reference-samples.md
+025-use-separate-unprivileged-web-runtime-images.md
 
 Each ADR should contain:
 

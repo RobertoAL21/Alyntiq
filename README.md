@@ -1,15 +1,15 @@
 # Alyntiq
 
 Alyntiq is a professional AI-powered quantitative research and paper-trading platform.
-Phases 0 through 22 are complete: foundation, historical market data, exploratory data
+Phases 0 through 23 are complete: foundation, historical market data, exploratory data
 analysis, feature engineering, target generation, baseline-model evaluation, and
 advanced-model evaluation, the historical backtesting engine, baseline strategies, the ML
 threshold strategy, an independent pre-trade risk engine, multi-asset portfolio accounting,
 and a paper-only Alpaca broker adapter, real-time Alpaca minute-bar consumption, a
 trading-decision audit trail, isolated historical strategy competition, and descriptive
 market-regime research, structured news research signals, hybrid strategy comparison, and
-deep-learning time-series research, model lifecycle registry controls, and OpenTelemetry
-observability instrumentation.
+deep-learning time-series research, model lifecycle registry controls, OpenTelemetry
+observability instrumentation, and fixed-reference data and model drift detection.
 
 The intended long-term flow is:
 
@@ -40,6 +40,8 @@ point-in-time transformations are in `features/`, labels are in `targets/`, and 
 advanced-model, and temporal deep-learning evaluation are in `models/`. The independent
 `model_registry/` package owns model lifecycle records and paper-order eligibility.
 The cross-cutting `observability/` package owns OpenTelemetry metrics and tracing setup.
+The pure `drift/` package compares fixed historical references with later samples and
+returns structured drift alerts without affecting trading decisions.
 PostgreSQL, Redis, and a persistent
 local MLflow store are provisioned with Docker Compose for local development. The pure,
 in-memory historical simulator is isolated in `backtesting/`. Independent pre-trade risk
@@ -323,7 +325,8 @@ trading-audit architecture](docs/architecture/trading-audit-trail.md) and [ADR 0
 
 ## Run with Docker
 
-After creating `.env`, build and start all services:
+After creating `.env` from `.env.example`, replace `POSTGRES_PASSWORD=replace-me` with a
+local secret. Build and start the local integration environment:
 
 ```bash
 docker compose up --build
@@ -340,6 +343,11 @@ To apply pending migrations in the backend container:
 ```bash
 docker compose exec backend alembic upgrade head
 ```
+
+The backend image runs as an unprivileged user and exposes `/health` on port `8000`; the
+production SPA image uses Nginx on port `8080` and exposes its own static `/health` route.
+See the [deployment architecture](docs/architecture/deployment.md) for image boundaries,
+runtime configuration, migration handling, and the AWS reference topology.
 
 ## Quality checks
 
@@ -377,7 +385,8 @@ backend/
     strategies/        Baseline and ML trading-decision implementations
   alembic/             Database migration environment
   tests/               API tests
-docker-compose.yml     Backend, PostgreSQL, and Redis services
+docker-compose.yml     Frontend, backend, PostgreSQL, and Redis services
+frontend/Dockerfile     Production SPA image
 ```
 
 GitHub Actions runs Ruff and pytest for pull requests and pushes to `main`.

@@ -2,7 +2,7 @@ Alyntiq — Current Phase
 
 Current Phase
 
-Phase 24 — Deployment
+Phase 25 — CI/CD
 
 Status
 
@@ -10,27 +10,27 @@ NOT STARTED
 
 Objective
 
-Create production-ready Docker images without embedding secrets.
+Validate changes automatically and add safety checks for the paper-trading platform.
 
 Current Phase Document
 
 Read:
 
-docs/phases/PHASE_24_DEPLOYMENT.md
+docs/phases/PHASE_25_CICD.md
 
 Current Scope
 
-* production-ready Docker images
-* deployment architecture documentation
+* pull-request validation for lint, tests, Docker builds, and financial safety checks
+* main-branch build, push, and deployment workflow design
 
 Explicitly Out of Scope
 
-* CI/CD work
+* new product features and live-trading capability
 
 Phase Completion
 
-When Phase 24 is complete:
+When Phase 25 is complete:
 
 1. Change status to COMPLETE and record relevant architecture decisions.
-2. Change this file to Phase 25.
+2. Change this file to Phase 26.
 3. Do not delete the completed phase documentation.

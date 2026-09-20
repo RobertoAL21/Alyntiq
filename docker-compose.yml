@@ -6,7 +6,7 @@ services:
       - path: .env
         required: false
     environment:
-      DATABASE_URL: ${DOCKER_DATABASE_URL:-postgresql+psycopg://alyntiq:alyntiq@postgres:5432/alyntiq}
+      DATABASE_URL: ${DOCKER_DATABASE_URL:-postgresql+psycopg://${POSTGRES_USER:-alyntiq}:${POSTGRES_PASSWORD:?POSTGRES_PASSWORD must be set in .env}@postgres:5432/${POSTGRES_DB:-alyntiq}}
       MLFLOW_TRACKING_URI: ${MLFLOW_TRACKING_URI:-sqlite:////app/mlruns/mlflow.db}
       MLFLOW_ARTIFACT_URI: ${MLFLOW_ARTIFACT_URI:-file:///app/mlruns/artifacts}
       GIT_PYTHON_REFRESH: quiet
@@ -19,13 +19,33 @@ services:
         condition: service_healthy
       redis:
         condition: service_healthy
+    healthcheck:
+      test:
+        [
+          "CMD",
+          "python",
+          "-c",
+          "from urllib.request import urlopen; urlopen('http://127.0.0.1:8000/health')",
+        ]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+
+  frontend:
+    build:
+      context: ./frontend
+    ports:
+      - "8080:8080"
+    depends_on:
+      backend:
+        condition: service_healthy
 
   postgres:
     image: postgres:16-alpine
     environment:
       POSTGRES_DB: ${POSTGRES_DB:-alyntiq}
       POSTGRES_USER: ${POSTGRES_USER:-alyntiq}
-      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-alyntiq}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?POSTGRES_PASSWORD must be set in .env}
     ports:
       - "5432:5432"
     volumes:

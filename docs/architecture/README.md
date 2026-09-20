@@ -26,6 +26,7 @@ deep-learning.md
 model-registry.md
 observability.md
 drift-detection.md
+deployment.md
 
 Potential future documents:
 
