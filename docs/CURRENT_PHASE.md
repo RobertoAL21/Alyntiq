@@ -2,35 +2,32 @@ Alyntiq — Current Phase
 
 Current Phase
 
-Phase 25 — CI/CD
+Phase 26 — Final Research Report
 
 Status
 
-NOT STARTED
+COMPLETE
 
 Objective
 
-Validate changes automatically and add safety checks for the paper-trading platform.
+Document the evidence, limitations, and observed results of Alyntiq research.
 
 Current Phase Document
 
 Read:
 
-docs/phases/PHASE_25_CICD.md
+docs/phases/PHASE_26_FINAL_REPORT.md
 
-Current Scope
+Completed Scope
 
-* pull-request validation for lint, tests, Docker builds, and financial safety checks
-* main-branch build, push, and deployment workflow design
+* final research report covering data, models, strategies, benchmarks, and limitations
+* evidence-based language for historical and paper-trading results
 
 Explicitly Out of Scope
 
-* new product features and live-trading capability
+* new trading features, performance claims, and live-trading capability
 
-Phase Completion
+Roadmap Status
 
-When Phase 25 is complete:
-
-1. Change status to COMPLETE and record relevant architecture decisions.
-2. Change this file to Phase 26.
-3. Do not delete the completed phase documentation.
+The Phase 0–26 implementation roadmap is complete. Further work requires a new approved
+phase; the completed phase documentation remains the project record.

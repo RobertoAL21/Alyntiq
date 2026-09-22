@@ -1,7 +1,7 @@
 # Alyntiq
 
 Alyntiq is a professional AI-powered quantitative research and paper-trading platform.
-Phases 0 through 23 are complete: foundation, historical market data, exploratory data
+Phases 0 through 26 are complete: foundation, historical market data, exploratory data
 analysis, feature engineering, target generation, baseline-model evaluation, and
 advanced-model evaluation, the historical backtesting engine, baseline strategies, the ML
 threshold strategy, an independent pre-trade risk engine, multi-asset portfolio accounting,
@@ -9,11 +9,17 @@ and a paper-only Alpaca broker adapter, real-time Alpaca minute-bar consumption,
 trading-decision audit trail, isolated historical strategy competition, and descriptive
 market-regime research, structured news research signals, hybrid strategy comparison, and
 deep-learning time-series research, model lifecycle registry controls, OpenTelemetry
-observability instrumentation, and fixed-reference data and model drift detection.
+observability instrumentation, fixed-reference data and model drift detection,
+production-oriented runtime images, CI validation and financial-safety gates, and the
+final research report.
 
 The intended long-term flow is:
 
 Market Data → Features → Models → Strategy → Risk → Execution → Portfolio
+
+The roadmap is complete. Read the evidence-focused [final research report](docs/research/final_results.md)
+before interpreting this implementation as an investment system or a record of market
+performance.
 
 Historical market-data ingestion, versioned feature and target generation, walk-forward
 model evaluation, a historical backtesting engine, comparable baseline strategies, and
@@ -389,4 +395,6 @@ docker-compose.yml     Frontend, backend, PostgreSQL, and Redis services
 frontend/Dockerfile     Production SPA image
 ```
 
-GitHub Actions runs Ruff and pytest for pull requests and pushes to `main`.
+GitHub Actions validates pull requests, `main` pushes, and manual runs with backend and
+frontend quality checks, financial-safety checks, and Docker builds. It does not publish
+images or deploy; see the [CI/CD architecture](docs/architecture/ci-cd.md).

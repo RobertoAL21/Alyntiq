@@ -27,6 +27,7 @@ model-registry.md
 observability.md
 drift-detection.md
 deployment.md
+ci-cd.md
 
 Potential future documents:
 

@@ -65,10 +65,17 @@ Validate:
 
 CI Requirements
 
-Every pull request should eventually run:
+Every pull request runs:
 
 * linting
 * formatting checks
 * unit tests
-* integration tests where practical
-* ML/data sanity checks as those phases are introduced
+* the complete backend pytest suite
+* frontend lint, tests, and production build
+* explicit feature-leakage, walk-forward, model-version, paper-broker, and backtesting
+  sanity checks
+* backend and frontend Docker image builds
+* tracked-file and paper-trading safety verification
+
+Image publication and deployment are deliberately not part of CI until protected external
+environments and credentials are explicitly configured.

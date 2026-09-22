@@ -20,6 +20,7 @@ Implemented decisions also include:
 023-use-opentelemetry-with-optional-otlp-export.md
 024-detect-drift-against-fixed-reference-samples.md
 025-use-separate-unprivileged-web-runtime-images.md
+026-keep-ci-release-free-of-credentials.md
 
 Each ADR should contain:
 

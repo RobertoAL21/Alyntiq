@@ -1,5 +1,7 @@
 Phase 26 — Final Research Report
 
+Status: COMPLETE
+
 Create:
 
 docs/research/final_results.md
@@ -34,3 +36,12 @@ Prefer:
 * observed result
 * experimental result
 * paper trading performance
+
+Delivered:
+
+* `docs/research/final_results.md`, which distinguishes the committed EDA findings from
+  implemented-but-unrun model, backtest, and paper-trading capabilities;
+* explicit rejected hypotheses and evidence gaps, rather than unsupported performance
+  claims; and
+* documented data, lineage, validation, safety boundaries, limitations, and a proposed
+  next research cycle.

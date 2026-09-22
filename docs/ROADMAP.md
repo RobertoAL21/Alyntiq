@@ -4,6 +4,9 @@ Alyntiq is built in sequential phases.
 
 Do not skip foundational phases unless explicitly documented.
 
+Implementation status: complete through Phase 26. Future work requires a new approved
+phase and must retain the paper-only trading boundary.
+
 ⸻
 
 Phase 0 — Project Foundation

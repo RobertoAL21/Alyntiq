@@ -116,3 +116,14 @@ def test_ml_strategy_holds_without_a_prediction_and_rejects_symbol_mismatch() ->
 
     with pytest.raises(MLStrategyError, match="symbol"):
         BacktestEngine().run((bar,), strategy)
+
+
+def test_model_prediction_requires_a_model_version() -> None:
+    with pytest.raises(MLStrategyError, match="model_version"):
+        ModelPrediction(
+            timestamp=datetime(2024, 1, 2, tzinfo=UTC),
+            symbol="AAPL",
+            up_probability=0.5,
+            model_version=" ",
+            feature_version="features-v1",
+        )
