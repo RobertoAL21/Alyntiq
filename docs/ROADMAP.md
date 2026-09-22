@@ -4,7 +4,7 @@ Alyntiq is built in sequential phases.
 
 Do not skip foundational phases unless explicitly documented.
 
-Implementation status: complete through Phase 26. Future work requires a new approved
+Implementation status: complete through Phase 27. Future work requires a new approved
 phase and must retain the paper-only trading boundary.
 
 ⸻
@@ -489,3 +489,15 @@ Use language such as:
 * experimental result
 * paper trading result
 * observed performance
+
+⸻
+
+Phase 27 — Read-Only Research Dashboard
+
+Replace the standalone frontend demonstration fixture with read-only views of persisted
+market, experiment, model-registry, and audit data. Do not add order submission, model
+inference, broker polling, or synthetic portfolio values.
+
+Detailed file:
+
+docs/phases/PHASE_27_REAL_DASHBOARD.md

@@ -97,7 +97,7 @@ No paper orders, account snapshots, fills, or PnL observations are stored in the
 - The historical simulator is single-symbol and long-only; it does not model liquidity, partial fills, shorting, leverage, intraday execution, or order-book effects.
 - Commission and slippage are explicit assumptions, not calibrated market-cost estimates.
 - There are no committed artifacts from model training, optimization, backtests, paper execution, telemetry export, or drift monitoring.
-- The dashboard is presentation-only; Prometheus/Grafana dashboards, alert delivery, model serving, a worker, and deployment automation are not implemented.
+- The dashboard exposes only persisted research records through read-only APIs. It still has no authoritative portfolio snapshots, strategy-run history, signals, Prometheus/Grafana dashboards, alert delivery, model serving, worker, or deployment automation.
 
 ## Recommended next research cycle
 

@@ -21,6 +21,7 @@ Implemented decisions also include:
 024-detect-drift-against-fixed-reference-samples.md
 025-use-separate-unprivileged-web-runtime-images.md
 026-keep-ci-release-free-of-credentials.md
+027-expose-persisted-research-data-through-read-only-dashboard-apis.md
 
 Each ADR should contain:
 

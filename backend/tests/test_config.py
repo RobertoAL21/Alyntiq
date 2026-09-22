@@ -24,3 +24,11 @@ def test_settings_read_runtime_environment(monkeypatch) -> None:
     assert settings.debug is True
     assert settings.database_url == "postgresql+psycopg://test:test@localhost:5432/test"
     assert settings.otel_exporter_otlp_endpoint == "http://collector:4318"
+
+
+def test_settings_treats_a_blank_otlp_endpoint_as_unset(monkeypatch) -> None:
+    monkeypatch.setenv("OTEL_EXPORTER_OTLP_ENDPOINT", "")
+
+    settings = Settings(_env_file=None)
+
+    assert settings.otel_exporter_otlp_endpoint is None

@@ -9,6 +9,8 @@ Delivered:
 * presentation-only typed demonstration data, pending future backend read APIs;
 * frontend linting, unit tests, and production build verification.
 
+The demonstration-data boundary was replaced by the Phase 27 read-only research dashboard.
+
 ## Technology
 
 - React

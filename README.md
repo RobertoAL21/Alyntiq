@@ -1,7 +1,7 @@
 # Alyntiq
 
 Alyntiq is a professional AI-powered quantitative research and paper-trading platform.
-Phases 0 through 26 are complete: foundation, historical market data, exploratory data
+Phases 0 through 27 are complete: foundation, historical market data, exploratory data
 analysis, feature engineering, target generation, baseline-model evaluation, and
 advanced-model evaluation, the historical backtesting engine, baseline strategies, the ML
 threshold strategy, an independent pre-trade risk engine, multi-asset portfolio accounting,
@@ -11,7 +11,7 @@ market-regime research, structured news research signals, hybrid strategy compar
 deep-learning time-series research, model lifecycle registry controls, OpenTelemetry
 observability instrumentation, fixed-reference data and model drift detection,
 production-oriented runtime images, CI validation and financial-safety gates, and the
-final research report.
+final research report, and the read-only research dashboard.
 
 The intended long-term flow is:
 
@@ -55,13 +55,15 @@ evaluation is isolated in `risk/`, multi-asset portfolio accounting is isolated 
 `portfolio/`, the paper-only broker adapter is isolated in `execution/`, and real-time
 market-data consumption is isolated in `market_data/`.
 The immutable decision audit trail is isolated in `audit/`.
-The standalone presentation-only React dashboard is in `frontend/`.
+The standalone React dashboard is in `frontend/`.
 
 ## Frontend dashboard
 
-The dashboard currently renders a clearly labelled demonstration snapshot, because the
-backend does not yet expose read-only dashboard APIs. It does not submit orders or contain
-financial, risk, portfolio, strategy, or execution logic.
+The dashboard reads persisted market bars, MLflow experiment runs, model-registry records,
+and trading-audit decisions through read-only FastAPI APIs. It clearly shows an empty or
+unavailable state when data does not exist: portfolio positions, portfolio performance,
+strategy-run results, and point-in-time signals are not persisted yet. It does not submit
+orders or contain financial, risk, portfolio, strategy, or execution logic.
 
 ```bash
 cd frontend

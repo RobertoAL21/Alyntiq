@@ -1,6 +1,7 @@
 from functools import lru_cache
 from typing import Literal
 
+from pydantic import field_validator
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
 
@@ -28,6 +29,13 @@ class Settings(BaseSettings):
     mlflow_experiment_name: str = "alyntiq-baselines"
     otel_service_name: str = "alyntiq-api"
     otel_exporter_otlp_endpoint: str | None = None
+
+    @field_validator("otel_exporter_otlp_endpoint", mode="before")
+    @classmethod
+    def normalize_optional_otlp_endpoint(cls, value: object) -> object:
+        if isinstance(value, str) and not value.strip():
+            return None
+        return value
 
 
 @lru_cache

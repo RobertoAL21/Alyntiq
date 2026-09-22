@@ -5,9 +5,10 @@ import type { Candle } from "../types/dashboard";
 
 interface MarketChartProps {
   data: Candle[];
+  symbol: string;
 }
 
-export function MarketChart({ data }: MarketChartProps) {
+export function MarketChart({ data, symbol }: MarketChartProps) {
   const containerRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -43,5 +44,5 @@ export function MarketChart({ data }: MarketChartProps) {
     };
   }, [data]);
 
-  return <div ref={containerRef} aria-label="AAPL candlestick and volume chart" />;
+  return <div ref={containerRef} aria-label={`${symbol} candlestick and volume chart`} />;
 }

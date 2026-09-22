@@ -16,9 +16,17 @@ It must not calculate predictions, derive trade proposals, approve risk, size po
 
 ## Current data boundary
 
-The backend currently has no read-only dashboard endpoints. The Phase 15 SPA therefore uses a clearly identified, typed demonstration snapshot in `src/data/dashboard-demo.ts`. It is an isolated presentation fixture, not a client-side trading implementation and not an authoritative portfolio record.
+Phase 27 replaces the demonstration fixture with typed, read-only API responses under
+`/api/dashboard`. The browser accesses them through a same-origin `/api/` proxy: Vite
+proxies to FastAPI in development, while the production Nginx image proxies to the Compose
+`backend` service.
 
-When a future phase adds read-only backend APIs, their response schemas should replace that fixture at the data boundary. The page and visualization components should remain presentation-only.
+The available persisted sources are market bars in PostgreSQL, MLflow experiment runs,
+model-registry records, and trading-audit decisions. The frontend shows an explicit empty
+state when any of those sources has no records. It marks positions, portfolio performance,
+strategy leaderboards, and point-in-time signals unavailable because the current
+architecture does not persist authoritative records for them. It never polls the broker,
+recreates a backtest, performs model inference, or submits an order.
 
 ## Running locally
 
@@ -36,3 +44,6 @@ The Vite development server listens on port `5173` by default.
 npm test
 npm run build
 ```
+
+When Compose is running, the browser can access the API at
+`http://localhost:8080/api/dashboard/overview`.

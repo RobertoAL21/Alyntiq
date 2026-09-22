@@ -22,22 +22,6 @@ export function MarketOrbit() {
         animate={reduceMotion ? undefined : { y: [0, -10, 0], rotate: [-1, 1, -1] }}
         transition={{ duration: 6, repeat: Infinity, ease: "easeInOut" }}
       />
-      <motion.div
-        className="absolute left-[5%] top-[22%] z-[2] rounded-xl border border-white/80 bg-white/85 px-3 py-2 shadow-[0_12px_28px_rgba(33,61,49,0.12)] backdrop-blur"
-        animate={reduceMotion ? undefined : { y: [0, 7, 0] }}
-        transition={{ duration: 4.2, repeat: Infinity, ease: "easeInOut" }}
-      >
-        <p className="text-[9px] font-bold uppercase tracking-[0.12em] text-[#7a8984]">Signal confidence</p>
-        <p className="font-display mt-0.5 text-sm font-semibold text-[#146d51]">78.0%</p>
-      </motion.div>
-      <motion.div
-        className="absolute bottom-[18%] right-[1%] z-[2] rounded-xl border border-[#c7e4d1] bg-[#eaf8ee]/90 px-3 py-2 shadow-[0_12px_28px_rgba(33,61,49,0.1)] backdrop-blur"
-        animate={reduceMotion ? undefined : { y: [0, -8, 0] }}
-        transition={{ duration: 4.8, repeat: Infinity, ease: "easeInOut", delay: 0.5 }}
-      >
-        <p className="text-[9px] font-bold uppercase tracking-[0.12em] text-[#55816b]">Market bias</p>
-        <p className="font-display mt-0.5 text-sm font-semibold text-[#146d51]">Bullish</p>
-      </motion.div>
     </div>
   );
 }
