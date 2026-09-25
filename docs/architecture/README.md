@@ -29,6 +29,7 @@ drift-detection.md
 deployment.md
 ci-cd.md
 paper-strategy-activation.md
+paper-worker-preflight.md
 
 Potential future documents:
 

@@ -11,6 +11,7 @@ from app.db.models.market_bar import MarketBar  # noqa: F401
 from app.db.models.market_feature import MarketFeature  # noqa: F401
 from app.db.models.market_target import MarketTarget  # noqa: F401
 from app.db.models.model_registry import ModelRegistryRecord  # noqa: F401
+from app.db.models.paper_worker_preflight import PaperWorkerPreflightRecord  # noqa: F401
 from app.db.models.strategy_deployment import StrategyDeploymentRecord  # noqa: F401
 from app.db.models.trading_decision import TradingDecisionRecord  # noqa: F401
 from app.market_data.schemas import HistoricalBar

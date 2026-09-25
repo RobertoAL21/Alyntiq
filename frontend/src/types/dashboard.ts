@@ -69,6 +69,9 @@ export interface StrategyDeployment {
   symbols: string[];
   created_at: string;
   updated_at: string;
+  latest_preflight_outcome: "ready" | "blocked" | null;
+  latest_preflight_reason: string | null;
+  latest_preflight_at: string | null;
 }
 
 export interface RiskLimitsInput {

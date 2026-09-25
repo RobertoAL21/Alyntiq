@@ -26,11 +26,13 @@ proxies to FastAPI in development, while the production Nginx image proxies to t
 `backend` service.
 
 The available persisted sources are market bars in PostgreSQL, MLflow experiment runs,
-model-registry records, and trading-audit decisions. The frontend shows an explicit empty
+model-registry records, trading-audit decisions, and paper-worker preflight records. The
+frontend shows an explicit empty
 state when any of those sources has no records. It marks positions, portfolio performance,
 strategy leaderboards, and point-in-time signals unavailable because the current
 architecture does not persist authoritative records for them. It never polls the broker,
-recreates a backtest, performs model inference, or submits an order.
+recreates a backtest, performs model inference, or submits an order. It can display a
+worker preflight but cannot invoke the worker from the browser.
 
 ## Running locally
 

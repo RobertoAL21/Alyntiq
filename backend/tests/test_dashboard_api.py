@@ -1,4 +1,5 @@
 from datetime import UTC, datetime
+from decimal import Decimal
 
 import pytest
 from fastapi.testclient import TestClient
@@ -12,6 +13,8 @@ from app.db.base import Base
 from app.db.session import get_db_session
 from app.main import app
 from app.market_data.repository import store_historical_bars
+from app.paper_worker.repository import store_preflight
+from app.paper_worker.types import PaperWorkerPreflight, PaperWorkerPreflightOutcome
 
 
 @pytest.fixture
@@ -94,6 +97,72 @@ def test_dashboard_returns_empty_persisted_collections(dashboard_db_session, mon
     assert models.json() == {"runs": []}
     assert trades.status_code == 200
     assert trades.json() == {"decisions": []}
+
+
+def test_dashboard_exposes_the_latest_worker_preflight(dashboard_db_session) -> None:
+    from app.model_registry.service import ModelRegistryService
+    from app.model_registry.types import ModelRegistration
+    from app.risk.types import RiskLimits
+    from app.strategy_deployments.service import StrategyDeploymentService
+    from app.strategy_deployments.types import StrategyDeploymentSpec
+
+    ModelRegistryService().register(
+        dashboard_db_session,
+        ModelRegistration(
+            model_name="reviewed_model",
+            model_version="reviewed-v1",
+            model_family="baseline",
+            dataset_version="dataset-v1",
+            feature_version="features-v1",
+            target_version="targets-v1",
+            parameters={"seed": 7},
+            metrics={"holdout_roc_auc": 0.61},
+            backtest_results={"sharpe_ratio": 0.8},
+            artifact_uri="file:///mlruns/artifacts/reviewed-v1",
+        ),
+    )
+    deployment = StrategyDeploymentService().create(
+        dashboard_db_session,
+        StrategyDeploymentSpec(
+            name="Research deployment",
+            model_version="reviewed-v1",
+            strategy_version="ml-strategy-v1",
+            feature_version="features-v1",
+            target_version="targets-v1",
+            source="alpaca:iex:raw",
+            timeframe="1D",
+            symbols=("AAPL",),
+            buy_threshold=Decimal("0.60"),
+            sell_threshold=Decimal("0.40"),
+            order_quantity=10,
+            risk_limits=RiskLimits(
+                maximum_position_size_pct=Decimal("0.10"),
+                maximum_portfolio_exposure=Decimal("0.40"),
+                maximum_daily_loss_pct=Decimal("0.03"),
+                maximum_drawdown_pct=Decimal("0.10"),
+                stop_loss_pct=Decimal("0.04"),
+                take_profit_pct=Decimal("0.08"),
+                max_trades_per_day=4,
+                minimum_cash_reserve=Decimal("1000"),
+            ),
+        ),
+    )
+    store_preflight(
+        dashboard_db_session,
+        PaperWorkerPreflight(
+            deployment_id=deployment.id,
+            outcome=PaperWorkerPreflightOutcome.BLOCKED,
+            reason="model is not production",
+            checked_at=datetime(2026, 9, 25, tzinfo=UTC),
+        ),
+    )
+    dashboard_db_session.commit()
+
+    with _client(dashboard_db_session) as client:
+        response = client.get("/api/dashboard/deployments")
+
+    assert response.status_code == 200
+    assert response.json()["deployments"][0]["latest_preflight_outcome"] == "blocked"
 
 
 def _client(db_session):

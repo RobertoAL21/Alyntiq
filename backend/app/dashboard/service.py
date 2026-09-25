@@ -12,6 +12,8 @@ from app.core.config import Settings
 from app.db.models.market_bar import MarketBar
 from app.db.models.model_registry import ModelRegistryRecord
 from app.db.models.trading_decision import TradingDecisionRecord
+from app.paper_worker.repository import latest_preflights_by_deployment
+from app.paper_worker.types import PaperWorkerPreflight
 from app.strategy_deployments.service import StrategyDeploymentService
 from app.strategy_deployments.types import StrategyDeployment
 
@@ -44,6 +46,12 @@ class ExperimentRun:
     precision: float | None
     roc_auc: float | None
     registry_state: str | None
+
+
+@dataclass(frozen=True)
+class StrategyDeploymentStatus:
+    deployment: StrategyDeployment
+    latest_preflight: PaperWorkerPreflight | None
 
 
 def load_overview(session: Session, settings: Settings) -> dict[str, object]:
@@ -151,9 +159,19 @@ def load_trading_decisions(session: Session, limit: int) -> tuple[TradingDecisio
     )
 
 
-def load_strategy_deployments(session: Session) -> tuple[StrategyDeployment, ...]:
+def load_strategy_deployments(session: Session) -> tuple[StrategyDeploymentStatus, ...]:
     """Return persisted control-plane state without granting mutation access."""
-    return StrategyDeploymentService().list(session)
+    deployments = StrategyDeploymentService().list(session)
+    latest = latest_preflights_by_deployment(
+        session, tuple(deployment.id for deployment in deployments)
+    )
+    return tuple(
+        StrategyDeploymentStatus(
+            deployment=deployment,
+            latest_preflight=latest.get(deployment.id),
+        )
+        for deployment in deployments
+    )
 
 
 def _metric(metrics: dict[str, float], *names: str) -> float | None:

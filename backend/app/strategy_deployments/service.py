@@ -115,6 +115,12 @@ class StrategyDeploymentService:
         logger.info("strategy_deployment_disarmed", extra={"deployment_id": updated.id})
         return updated
 
+    def assert_eligible(
+        self, session: Session, deployment: StrategyDeployment, settings: Settings
+    ) -> None:
+        """Recheck a persisted deployment without changing its state."""
+        self._assert_eligible(session, deployment, settings)
+
     def _get(self, session: Session, deployment_id: str) -> StrategyDeployment:
         try:
             deployment = find_deployment(session, deployment_id)

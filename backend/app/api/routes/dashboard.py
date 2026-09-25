@@ -92,6 +92,9 @@ class StrategyDeploymentSummaryResponse(BaseModel):
     symbols: list[str]
     created_at: datetime
     updated_at: datetime
+    latest_preflight_outcome: str | None
+    latest_preflight_reason: str | None
+    latest_preflight_at: datetime | None
 
 
 class StrategyDeploymentsResponse(BaseModel):
@@ -134,16 +137,27 @@ def dashboard_strategy_deployments(session: DbSession) -> StrategyDeploymentsRes
     return StrategyDeploymentsResponse(
         deployments=[
             StrategyDeploymentSummaryResponse(
-                id=deployment.id,
-                name=deployment.spec.name,
-                state=deployment.state.value,
-                model_version=deployment.spec.model_version,
-                strategy_version=deployment.spec.strategy_version,
-                symbols=list(deployment.spec.symbols),
-                created_at=deployment.created_at,
-                updated_at=deployment.updated_at,
+                id=status.deployment.id,
+                name=status.deployment.spec.name,
+                state=status.deployment.state.value,
+                model_version=status.deployment.spec.model_version,
+                strategy_version=status.deployment.spec.strategy_version,
+                symbols=list(status.deployment.spec.symbols),
+                created_at=status.deployment.created_at,
+                updated_at=status.deployment.updated_at,
+                latest_preflight_outcome=(
+                    None
+                    if status.latest_preflight is None
+                    else status.latest_preflight.outcome.value
+                ),
+                latest_preflight_reason=(
+                    None if status.latest_preflight is None else status.latest_preflight.reason
+                ),
+                latest_preflight_at=(
+                    None if status.latest_preflight is None else status.latest_preflight.checked_at
+                ),
             )
-            for deployment in load_strategy_deployments(session)
+            for status in load_strategy_deployments(session)
         ]
     )
 

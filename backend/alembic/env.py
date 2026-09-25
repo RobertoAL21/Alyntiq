@@ -10,6 +10,7 @@ from app.db.models import (  # noqa: F401
     MarketFeature,
     MarketTarget,
     ModelRegistryRecord,
+    PaperWorkerPreflightRecord,
     StrategyDeploymentRecord,
     TradingDecisionRecord,
 )

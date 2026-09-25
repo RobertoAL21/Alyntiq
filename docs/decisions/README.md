@@ -23,6 +23,7 @@ Implemented decisions also include:
 026-keep-ci-release-free-of-credentials.md
 027-expose-persisted-research-data-through-read-only-dashboard-apis.md
 028-keep-dashboard-activation-as-a-paper-only-control-plane.md
+029-use-single-cycle-paper-worker-preflight.md
 
 Each ADR should contain:
 

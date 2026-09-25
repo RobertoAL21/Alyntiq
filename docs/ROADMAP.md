@@ -4,7 +4,7 @@ Alyntiq is built in sequential phases.
 
 Do not skip foundational phases unless explicitly documented.
 
-Implementation status: complete through Phase 28. Future work requires a new approved
+Implementation status: complete through Phase 29. Future work requires a new approved
 phase and must retain the paper-only trading boundary.
 
 ⸻
@@ -512,3 +512,14 @@ An `armed` configuration is not a worker and cannot submit orders.
 Detailed file:
 
 docs/phases/PHASE_28_PAPER_STRATEGY_ACTIVATION.md
+
+⸻
+
+Phase 29 — Paper Worker Preflight
+
+Run a durable, one-shot eligibility check for armed paper deployments. It records whether a
+configuration is ready for a future runtime but does not perform inference or execution.
+
+Detailed file:
+
+docs/phases/PHASE_29_PAPER_WORKER_PREFLIGHT.md

@@ -1,7 +1,7 @@
 # Alyntiq
 
 Alyntiq is a professional AI-powered quantitative research and paper-trading platform.
-Phases 0 through 28 are complete: foundation, historical market data, exploratory data
+Phases 0 through 29 are complete: foundation, historical market data, exploratory data
 analysis, feature engineering, target generation, baseline-model evaluation, and
 advanced-model evaluation, the historical backtesting engine, baseline strategies, the ML
 threshold strategy, an independent pre-trade risk engine, multi-asset portfolio accounting,
@@ -12,7 +12,7 @@ deep-learning time-series research, model lifecycle registry controls, OpenTelem
 observability instrumentation, fixed-reference data and model drift detection,
 production-oriented runtime images, CI validation and financial-safety gates, and the
 final research report, the read-only research dashboard, and a paper-only strategy
-deployment control plane.
+deployment control plane, and a one-shot paper-worker preflight.
 
 The intended long-term flow is:
 
@@ -59,6 +59,8 @@ The immutable decision audit trail is isolated in `audit/`.
 The standalone React dashboard is in `frontend/`.
 The `strategy_deployments/` package owns persistent configuration states (`draft`,
 `validated`, and `armed`) for a future paper worker; it does not execute trades.
+The `paper_worker/` package records a fresh one-cycle eligibility preflight for armed
+deployments and remains outside model, strategy, risk, and execution layers.
 
 ## Frontend dashboard
 
@@ -81,6 +83,20 @@ openssl rand -hex 32
 The backend requires a `production` registry model with exactly matching feature and target
 versions, `TRADING_ENVIRONMENT=paper`, and all risk limits explicitly configured before it
 will arm a deployment. This local token is not public multi-user authentication.
+
+## Paper-worker preflight
+
+After a reviewed deployment is armed, the operator can recheck it at runtime with one
+explicit, non-executing cycle:
+
+```bash
+docker compose exec backend python -m scripts.run_paper_worker --once
+```
+
+It records `ready` only when the deployment remains paper-only and its model remains
+`production` with matching feature and target lineage. `blocked` is persisted when a check
+fails. This command never loads a model, calculates a signal, evaluates risk, polls Alpaca,
+or submits an order. The latest result appears on the Models page.
 
 ```bash
 cd frontend
