@@ -1,7 +1,7 @@
 # Alyntiq
 
 Alyntiq is a professional AI-powered quantitative research and paper-trading platform.
-Phases 0 through 27 are complete: foundation, historical market data, exploratory data
+Phases 0 through 28 are complete: foundation, historical market data, exploratory data
 analysis, feature engineering, target generation, baseline-model evaluation, and
 advanced-model evaluation, the historical backtesting engine, baseline strategies, the ML
 threshold strategy, an independent pre-trade risk engine, multi-asset portfolio accounting,
@@ -11,13 +11,14 @@ market-regime research, structured news research signals, hybrid strategy compar
 deep-learning time-series research, model lifecycle registry controls, OpenTelemetry
 observability instrumentation, fixed-reference data and model drift detection,
 production-oriented runtime images, CI validation and financial-safety gates, and the
-final research report, and the read-only research dashboard.
+final research report, the read-only research dashboard, and a paper-only strategy
+deployment control plane.
 
 The intended long-term flow is:
 
 Market Data → Features → Models → Strategy → Risk → Execution → Portfolio
 
-The roadmap is complete. Read the evidence-focused [final research report](docs/research/final_results.md)
+The roadmap is complete through the implemented phases. Read the evidence-focused [final research report](docs/research/final_results.md)
 before interpreting this implementation as an investment system or a record of market
 performance.
 
@@ -56,6 +57,8 @@ evaluation is isolated in `risk/`, multi-asset portfolio accounting is isolated 
 market-data consumption is isolated in `market_data/`.
 The immutable decision audit trail is isolated in `audit/`.
 The standalone React dashboard is in `frontend/`.
+The `strategy_deployments/` package owns persistent configuration states (`draft`,
+`validated`, and `armed`) for a future paper worker; it does not execute trades.
 
 ## Frontend dashboard
 
@@ -64,6 +67,20 @@ and trading-audit decisions through read-only FastAPI APIs. It clearly shows an 
 unavailable state when data does not exist: portfolio positions, portfolio performance,
 strategy-run results, and point-in-time signals are not persisted yet. It does not submit
 orders or contain financial, risk, portfolio, strategy, or execution logic.
+
+The Models page can also create, validate, arm, and disarm a paper-deployment configuration.
+This is a control plane only: `armed` never starts a worker, loads a model, or contacts
+Alpaca. Mutations require `DASHBOARD_CONTROL_TOKEN`, kept only in the page memory. To enable
+the local controls, generate a separate value and place it in the untracked `.env`:
+
+```bash
+openssl rand -hex 32
+# Copy the generated value into DASHBOARD_CONTROL_TOKEN in .env
+```
+
+The backend requires a `production` registry model with exactly matching feature and target
+versions, `TRADING_ENVIRONMENT=paper`, and all risk limits explicitly configured before it
+will arm a deployment. This local token is not public multi-user authentication.
 
 ```bash
 cd frontend

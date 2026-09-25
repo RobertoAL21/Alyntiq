@@ -12,6 +12,8 @@ from app.core.config import Settings
 from app.db.models.market_bar import MarketBar
 from app.db.models.model_registry import ModelRegistryRecord
 from app.db.models.trading_decision import TradingDecisionRecord
+from app.strategy_deployments.service import StrategyDeploymentService
+from app.strategy_deployments.types import StrategyDeployment
 
 
 @dataclass(frozen=True)
@@ -147,6 +149,11 @@ def load_trading_decisions(session: Session, limit: int) -> tuple[TradingDecisio
             .limit(limit)
         ).all()
     )
+
+
+def load_strategy_deployments(session: Session) -> tuple[StrategyDeployment, ...]:
+    """Return persisted control-plane state without granting mutation access."""
+    return StrategyDeploymentService().list(session)
 
 
 def _metric(metrics: dict[str, float], *names: str) -> float | None:

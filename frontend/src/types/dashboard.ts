@@ -57,3 +57,42 @@ export interface TradingDecision {
   confidence: number | null;
   reason: string;
 }
+
+export type StrategyDeploymentState = "draft" | "validated" | "armed";
+
+export interface StrategyDeployment {
+  id: string;
+  name: string;
+  state: StrategyDeploymentState;
+  model_version: string;
+  strategy_version: string;
+  symbols: string[];
+  created_at: string;
+  updated_at: string;
+}
+
+export interface RiskLimitsInput {
+  maximum_position_size_pct: string;
+  maximum_portfolio_exposure: string;
+  maximum_daily_loss_pct: string;
+  maximum_drawdown_pct: string;
+  stop_loss_pct: string;
+  take_profit_pct: string;
+  max_trades_per_day: string;
+  minimum_cash_reserve: string;
+}
+
+export interface StrategyDeploymentCreateInput {
+  name: string;
+  model_version: string;
+  strategy_version: string;
+  feature_version: string;
+  target_version: string;
+  source: string;
+  timeframe: string;
+  symbols: string[];
+  buy_threshold: string;
+  sell_threshold: string;
+  order_quantity: string;
+  risk_limits: RiskLimitsInput;
+}

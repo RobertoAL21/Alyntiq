@@ -20,6 +20,7 @@ class Settings(BaseSettings):
     database_url: str = "postgresql+psycopg://alyntiq:alyntiq@localhost:5432/alyntiq"
     redis_url: str = "redis://localhost:6379/0"
     trading_environment: Literal["paper", "live"] = "paper"
+    dashboard_control_token: str | None = None
     alpaca_api_key: str | None = None
     alpaca_secret_key: str | None = None
     alpaca_data_url: str = "https://data.alpaca.markets/v2"
@@ -33,6 +34,13 @@ class Settings(BaseSettings):
     @field_validator("otel_exporter_otlp_endpoint", mode="before")
     @classmethod
     def normalize_optional_otlp_endpoint(cls, value: object) -> object:
+        if isinstance(value, str) and not value.strip():
+            return None
+        return value
+
+    @field_validator("dashboard_control_token", mode="before")
+    @classmethod
+    def normalize_optional_dashboard_control_token(cls, value: object) -> object:
         if isinstance(value, str) and not value.strip():
             return None
         return value

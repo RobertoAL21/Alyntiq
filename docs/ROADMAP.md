@@ -4,7 +4,7 @@ Alyntiq is built in sequential phases.
 
 Do not skip foundational phases unless explicitly documented.
 
-Implementation status: complete through Phase 27. Future work requires a new approved
+Implementation status: complete through Phase 28. Future work requires a new approved
 phase and must retain the paper-only trading boundary.
 
 ⸻
@@ -501,3 +501,14 @@ inference, broker polling, or synthetic portfolio values.
 Detailed file:
 
 docs/phases/PHASE_27_REAL_DASHBOARD.md
+
+⸻
+
+Phase 28 — Paper Strategy Activation
+
+Prepare and validate explicit paper-strategy deployment configurations from the dashboard.
+An `armed` configuration is not a worker and cannot submit orders.
+
+Detailed file:
+
+docs/phases/PHASE_28_PAPER_STRATEGY_ACTIVATION.md

@@ -28,6 +28,7 @@ observability.md
 drift-detection.md
 deployment.md
 ci-cd.md
+paper-strategy-activation.md
 
 Potential future documents:
 

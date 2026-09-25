@@ -6,13 +6,17 @@ The frontend is a standalone React single-page application (SPA) that presents A
 
 ## Responsibilities
 
-The frontend owns only presentation and user navigation:
+The frontend owns only presentation, user navigation, and narrowly scoped paper-deployment
+control requests:
 
 - overview, positions, trades, strategies, models, and market views;
 - table, badge, metric, and chart rendering;
-- formatting values supplied by the backend.
+- formatting values supplied by the backend; and
+- submitting an explicit deployment configuration for backend validation, using an
+  in-memory local control token.
 
-It must not calculate predictions, derive trade proposals, approve risk, size positions, or submit broker orders. Those remain backend responsibilities.
+It must not calculate predictions, derive trade proposals, approve risk, size positions, or submit broker orders. Those remain backend responsibilities. An armed deployment is
+displayed as configuration state only; the frontend cannot start a worker or contact Alpaca.
 
 ## Current data boundary
 

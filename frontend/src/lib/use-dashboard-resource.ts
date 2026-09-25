@@ -4,10 +4,12 @@ export interface DashboardResource<T> {
   data: T | null;
   error: string | null;
   loading: boolean;
+  reload: () => void;
 }
 
 export function useDashboardResource<T>(load: () => Promise<T>): DashboardResource<T> {
-  const [state, setState] = useState<DashboardResource<T>>({ data: null, error: null, loading: true });
+  const [state, setState] = useState<Omit<DashboardResource<T>, "reload">>({ data: null, error: null, loading: true });
+  const [reloadKey, setReloadKey] = useState(0);
 
   useEffect(() => {
     let active = true;
@@ -17,7 +19,7 @@ export function useDashboardResource<T>(load: () => Promise<T>): DashboardResour
     return () => {
       active = false;
     };
-  }, [load]);
+  }, [load, reloadKey]);
 
-  return state;
+  return { ...state, reload: () => setReloadKey((value) => value + 1) };
 }

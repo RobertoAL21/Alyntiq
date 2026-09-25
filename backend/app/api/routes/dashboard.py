@@ -15,6 +15,7 @@ from app.dashboard.service import (
     load_experiment_runs,
     load_market_snapshot,
     load_overview,
+    load_strategy_deployments,
     load_trading_decisions,
 )
 from app.db.session import get_db_session
@@ -82,6 +83,21 @@ class TradesResponse(BaseModel):
     decisions: list[TradingDecisionResponse]
 
 
+class StrategyDeploymentSummaryResponse(BaseModel):
+    id: str
+    name: str
+    state: str
+    model_version: str
+    strategy_version: str
+    symbols: list[str]
+    created_at: datetime
+    updated_at: datetime
+
+
+class StrategyDeploymentsResponse(BaseModel):
+    deployments: list[StrategyDeploymentSummaryResponse]
+
+
 @router.get("/overview", response_model=OverviewResponse)
 def dashboard_overview(session: DbSession) -> OverviewResponse:
     return OverviewResponse.model_validate(load_overview(session, get_settings()))
@@ -110,6 +126,25 @@ def dashboard_market(
 def dashboard_models(session: DbSession) -> ModelsResponse:
     return ModelsResponse(
         runs=[_experiment_response(run) for run in load_experiment_runs(session, get_settings())]
+    )
+
+
+@router.get("/deployments", response_model=StrategyDeploymentsResponse)
+def dashboard_strategy_deployments(session: DbSession) -> StrategyDeploymentsResponse:
+    return StrategyDeploymentsResponse(
+        deployments=[
+            StrategyDeploymentSummaryResponse(
+                id=deployment.id,
+                name=deployment.spec.name,
+                state=deployment.state.value,
+                model_version=deployment.spec.model_version,
+                strategy_version=deployment.spec.strategy_version,
+                symbols=list(deployment.spec.symbols),
+                created_at=deployment.created_at,
+                updated_at=deployment.updated_at,
+            )
+            for deployment in load_strategy_deployments(session)
+        ]
     )
 
 
