@@ -4,7 +4,7 @@ Alyntiq is built in sequential phases.
 
 Do not skip foundational phases unless explicitly documented.
 
-Implementation status: complete through Phase 29. Future work requires a new approved
+Implementation status: complete through Phase 30. Future work requires a new approved
 phase and must retain the paper-only trading boundary.
 
 ⸻
@@ -523,3 +523,14 @@ configuration is ready for a future runtime but does not perform inference or ex
 Detailed file:
 
 docs/phases/PHASE_29_PAPER_WORKER_PREFLIGHT.md
+
+⸻
+
+Phase 30 — Reproducible Linear Model Artifacts
+
+Train a reviewed JSON-only logistic-regression artifact from versioned historical data.
+It pins model inputs and emits probabilities only; it does not run a worker or trade.
+
+Detailed file:
+
+docs/phases/PHASE_30_REPRODUCIBLE_LINEAR_ARTIFACTS.md

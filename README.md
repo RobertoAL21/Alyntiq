@@ -1,7 +1,7 @@
 # Alyntiq
 
 Alyntiq is a professional AI-powered quantitative research and paper-trading platform.
-Phases 0 through 29 are complete: foundation, historical market data, exploratory data
+Phases 0 through 30 are complete: foundation, historical market data, exploratory data
 analysis, feature engineering, target generation, baseline-model evaluation, and
 advanced-model evaluation, the historical backtesting engine, baseline strategies, the ML
 threshold strategy, an independent pre-trade risk engine, multi-asset portfolio accounting,
@@ -12,7 +12,8 @@ deep-learning time-series research, model lifecycle registry controls, OpenTelem
 observability instrumentation, fixed-reference data and model drift detection,
 production-oriented runtime images, CI validation and financial-safety gates, and the
 final research report, the read-only research dashboard, and a paper-only strategy
-deployment control plane, and a one-shot paper-worker preflight.
+deployment control plane, a one-shot paper-worker preflight, and reproducible linear-model
+artifacts.
 
 The intended long-term flow is:
 
@@ -61,6 +62,8 @@ The `strategy_deployments/` package owns persistent configuration states (`draft
 `validated`, and `armed`) for a future paper worker; it does not execute trades.
 The `paper_worker/` package records a fresh one-cycle eligibility preflight for armed
 deployments and remains outside model, strategy, risk, and execution layers.
+The `model_artifacts/` package stores data-only logistic-regression coefficients and feature
+contracts for a future inference runtime.
 
 ## Frontend dashboard
 
@@ -97,6 +100,25 @@ It records `ready` only when the deployment remains paper-only and its model rem
 `production` with matching feature and target lineage. `blocked` is persisted when a check
 fails. This command never loads a model, calculates a signal, evaluates risk, polls Alpaca,
 or submits an order. The latest result appears on the Models page.
+
+## Reproducible linear artifacts
+
+Train a JSON-only logistic-regression artifact using versioned feature/target rows before an
+explicit UTC training cutoff:
+
+```bash
+docker compose exec backend python -m scripts.train_linear_artifact \
+  --model-version linear-v1 \
+  --feature-version features-v1 \
+  --target-version targets-v1 \
+  --dataset-version dataset-v1 \
+  --training-end 2026-09-18 \
+  --artifact-path /app/mlruns/artifacts/linear-v1.json
+```
+
+The command writes only a JSON feature/scaler/coefficient contract; it does not register or
+promote the artifact, serve it, generate a signal, or trade. Review its metrics separately
+and register the emitted `artifact_uri` through the existing model-registry process.
 
 ```bash
 cd frontend

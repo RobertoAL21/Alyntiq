@@ -30,6 +30,7 @@ deployment.md
 ci-cd.md
 paper-strategy-activation.md
 paper-worker-preflight.md
+reproducible-linear-artifacts.md
 
 Potential future documents:
 

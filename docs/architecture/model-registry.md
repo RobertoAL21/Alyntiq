@@ -27,6 +27,10 @@ This keeps the registry independent of MLflow: MLflow remains the experiment tra
 while the registry records the reviewed artifact and evidence that a paper-trading flow is
 allowed to reference.
 
+Phase 30 adds a JSON-only logistic-regression artifact format, but artifact training and
+registry promotion remain separate operator actions. The registry does not infer that an
+MLflow result is loadable, and it does not automatically promote a newly written artifact.
+
 ## Lifecycle
 
 Allowed transitions are deliberate:

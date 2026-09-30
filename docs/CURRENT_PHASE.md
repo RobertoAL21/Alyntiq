@@ -2,7 +2,7 @@ Alyntiq — Current Phase
 
 Current Phase
 
-Phase 29 — Paper Worker Preflight
+Phase 30 — Reproducible Linear Model Artifacts
 
 Status
 
@@ -10,24 +10,24 @@ COMPLETE
 
 Objective
 
-Recheck armed paper configurations at runtime and persist a non-executing worker preflight.
+Create a safe, loadable logistic-regression artifact with exact feature and training lineage.
 
 Current Phase Document
 
 Read:
 
-docs/phases/PHASE_29_PAPER_WORKER_PREFLIGHT.md
+docs/phases/PHASE_30_REPRODUCIBLE_LINEAR_ARTIFACTS.md
 
 Completed Scope
 
-* one-shot runtime preflight records for armed paper deployments
-* fresh paper, registry, and data-lineage checks before a future worker can consume one
+* JSON-only logistic-regression artifact training and validation
+* explicit feature contract, dataset lineage, and chronological training cutoff
 
 Explicitly Out of Scope
 
-* model inference, broker polling, order submission, daemon scheduling, and live trading
+* registry promotion, runtime worker inference, broker polling, order submission, and live trading
 
 Roadmap Status
 
-Phase 29 is complete. The worker records a one-shot preflight for armed configurations and
-has no execution authority.
+Phase 30 is complete. Artifact creation is a research/runtime prerequisite and does not by
+itself enable inference or execution.

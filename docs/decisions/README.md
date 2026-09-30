@@ -24,6 +24,7 @@ Implemented decisions also include:
 027-expose-persisted-research-data-through-read-only-dashboard-apis.md
 028-keep-dashboard-activation-as-a-paper-only-control-plane.md
 029-use-single-cycle-paper-worker-preflight.md
+030-use-json-linear-artifacts-before-runtime-inference.md
 
 Each ADR should contain:
 
