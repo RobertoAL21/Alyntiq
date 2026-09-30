@@ -25,6 +25,7 @@ Implemented decisions also include:
 028-keep-dashboard-activation-as-a-paper-only-control-plane.md
 029-use-single-cycle-paper-worker-preflight.md
 030-use-json-linear-artifacts-before-runtime-inference.md
+031-expose-one-shot-preflight-through-controlled-dashboard.md
 
 Each ADR should contain:
 

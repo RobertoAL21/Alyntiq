@@ -122,6 +122,27 @@ def test_control_api_is_disabled_without_a_configured_token(
     assert response.status_code == 503
 
 
+def test_dashboard_can_run_one_token_protected_preflight_cycle(
+    deployment_db_session, monkeypatch
+) -> None:
+    monkeypatch.setattr(
+        deployment_route,
+        "get_settings",
+        lambda: Settings(_env_file=None, DASHBOARD_CONTROL_TOKEN="local-control"),
+    )
+
+    with _client(deployment_db_session) as client:
+        denied = client.post("/api/control/paper-worker/preflight")
+        response = client.post(
+            "/api/control/paper-worker/preflight",
+            headers={"X-Alyntiq-Control-Token": "local-control"},
+        )
+
+    assert denied.status_code == 401
+    assert response.status_code == 200
+    assert response.json() == {"checked": 0, "ready": 0, "blocked": 0, "results": []}
+
+
 def _client(db_session):
     app.dependency_overrides[get_db_session] = lambda: db_session
     return _DeploymentClient()

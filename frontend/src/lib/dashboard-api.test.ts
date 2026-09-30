@@ -8,6 +8,7 @@ import {
   loadOverview,
   loadStrategyDeployments,
   loadTrades,
+  runPaperWorkerPreflight,
 } from "./dashboard-api";
 
 afterEach(() => {
@@ -60,12 +61,14 @@ describe("dashboard API client", () => {
       },
     }, "local-control");
     await armStrategyDeployment("deployment-1", "local-control");
+    await runPaperWorkerPreflight("local-control");
 
     expect(fetchMock).toHaveBeenNthCalledWith(1, "/api/control/strategy-deployments", expect.objectContaining({
       method: "POST",
       headers: expect.objectContaining({ "X-Alyntiq-Control-Token": "local-control" }),
     }));
     expect(fetchMock).toHaveBeenNthCalledWith(2, "/api/control/strategy-deployments/deployment-1/arm", expect.objectContaining({ method: "POST" }));
+    expect(fetchMock).toHaveBeenNthCalledWith(3, "/api/control/paper-worker/preflight", expect.objectContaining({ method: "POST" }));
   });
 
   it("surfaces a failed API response instead of returning presentation data", async () => {

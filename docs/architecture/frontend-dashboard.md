@@ -33,6 +33,8 @@ strategy leaderboards, and point-in-time signals unavailable because the current
 architecture does not persist authoritative records for them. It never polls the broker,
 recreates a backtest, performs model inference, or submits an order. It can display a
 worker preflight but cannot invoke the worker from the browser.
+Phase 31 permits one token-protected, one-shot preflight request from the Models page; it
+does not permit a background-worker lifecycle or broker action.
 
 ## Running locally
 

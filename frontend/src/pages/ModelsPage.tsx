@@ -11,6 +11,7 @@ import {
   disarmStrategyDeployment,
   loadModels,
   loadStrategyDeployments,
+  runPaperWorkerPreflight,
   validateStrategyDeployment,
 } from "../lib/dashboard-api";
 import { formatDateTime, formatPercent } from "../lib/format";
@@ -100,6 +101,20 @@ export function ModelsPage() {
     }
   }
 
+  async function runPreflight() {
+    setPending("preflight");
+    setFeedback(null);
+    try {
+      const result = await runPaperWorkerPreflight(controlToken);
+      setFeedback(`Safety check completed: ${result.ready} ready, ${result.blocked} blocked, ${result.checked} checked. No model or order was executed.`);
+      deployments.reload();
+    } catch (reason) {
+      setFeedback(messageFor(reason));
+    } finally {
+      setPending(null);
+    }
+  }
+
   return (
     <>
       <PageHeader
@@ -131,6 +146,8 @@ export function ModelsPage() {
             <label className="mb-1.5 block text-xs font-semibold text-[#53635e]" htmlFor="control-token">Local control token</label>
             <input id="control-token" className={inputClass} type="password" autoComplete="off" value={controlToken} onChange={(event) => setControlToken(event.target.value)} placeholder="Paste DASHBOARD_CONTROL_TOKEN" />
             <p className="mt-2 text-xs leading-5 text-[#74817d]">Held only in this page&apos;s memory and sent only to mutation endpoints. Leave it blank to keep controls disabled.</p>
+            <button type="button" className="mt-3 rounded-xl border border-[#b9d8c1] bg-white px-3.5 py-2 text-sm font-semibold text-[#267352] transition hover:bg-[#eff8f1] disabled:cursor-not-allowed disabled:border-[#dfe8e0] disabled:text-[#9aaba1]" disabled={!controlsEnabled} onClick={runPreflight}>{pending === "preflight" ? "Checking…" : "Run safety check"}</button>
+            <p className="mt-2 text-xs text-[#87938f]">Runs one preflight cycle only. It does not start a bot; use Disarm to revoke an armed deployment.</p>
             {feedback ? <p role="status" className="mt-3 rounded-xl bg-[#edf5ee] px-3 py-2 text-sm text-[#3f6650]">{feedback}</p> : null}
             <form className="mt-5 grid gap-3" onSubmit={submitDeployment}>
               <p className="text-sm font-semibold text-[#30403b]">Create a paper deployment draft</p>

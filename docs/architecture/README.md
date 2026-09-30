@@ -31,6 +31,7 @@ ci-cd.md
 paper-strategy-activation.md
 paper-worker-preflight.md
 reproducible-linear-artifacts.md
+operational-preflight-dashboard.md
 
 Potential future documents:
 

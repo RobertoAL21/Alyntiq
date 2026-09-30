@@ -1,7 +1,7 @@
 # Alyntiq
 
 Alyntiq is a professional AI-powered quantitative research and paper-trading platform.
-Phases 0 through 30 are complete: foundation, historical market data, exploratory data
+Phases 0 through 31 are complete: foundation, historical market data, exploratory data
 analysis, feature engineering, target generation, baseline-model evaluation, and
 advanced-model evaluation, the historical backtesting engine, baseline strategies, the ML
 threshold strategy, an independent pre-trade risk engine, multi-asset portfolio accounting,
@@ -13,7 +13,7 @@ observability instrumentation, fixed-reference data and model drift detection,
 production-oriented runtime images, CI validation and financial-safety gates, and the
 final research report, the read-only research dashboard, and a paper-only strategy
 deployment control plane, a one-shot paper-worker preflight, and reproducible linear-model
-artifacts.
+artifacts, and an operational paper-worker preflight dashboard.
 
 The intended long-term flow is:
 
@@ -119,6 +119,14 @@ docker compose exec backend python -m scripts.train_linear_artifact \
 The command writes only a JSON feature/scaler/coefficient contract; it does not register or
 promote the artifact, serve it, generate a signal, or trade. Review its metrics separately
 and register the emitted `artifact_uri` through the existing model-registry process.
+
+## Operational preflight dashboard
+
+The Models page includes **Run safety check** beside the existing deployment controls. Paste
+`DASHBOARD_CONTROL_TOKEN` and use it to invoke one persisted preflight cycle without leaving
+the dashboard. The result refreshes the real deployment status. This is not a Start/Stop
+control: Alyntiq currently has no continuous trading worker, and the action cannot load a
+model, contact Alpaca, or submit an order. Use **Disarm** to revoke an armed deployment.
 
 ```bash
 cd frontend

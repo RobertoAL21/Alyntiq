@@ -4,7 +4,7 @@ Alyntiq is built in sequential phases.
 
 Do not skip foundational phases unless explicitly documented.
 
-Implementation status: complete through Phase 30. Future work requires a new approved
+Implementation status: complete through Phase 31. Future work requires a new approved
 phase and must retain the paper-only trading boundary.
 
 ⸻
@@ -534,3 +534,14 @@ It pins model inputs and emits probabilities only; it does not run a worker or t
 Detailed file:
 
 docs/phases/PHASE_30_REPRODUCIBLE_LINEAR_ARTIFACTS.md
+
+⸻
+
+Phase 31 — Operational Preflight Dashboard
+
+Expose the current one-shot paper worker safely from the existing Models dashboard. It does
+not create a continuous bot or execute trades.
+
+Detailed file:
+
+docs/phases/PHASE_31_OPERATIONAL_PREFLIGHT_DASHBOARD.md

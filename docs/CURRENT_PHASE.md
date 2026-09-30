@@ -2,7 +2,7 @@ Alyntiq — Current Phase
 
 Current Phase
 
-Phase 30 — Reproducible Linear Model Artifacts
+Phase 31 — Operational Preflight Dashboard
 
 Status
 
@@ -10,24 +10,24 @@ COMPLETE
 
 Objective
 
-Create a safe, loadable logistic-regression artifact with exact feature and training lineage.
+Operate the existing one-shot paper-worker preflight from the Models dashboard.
 
 Current Phase Document
 
 Read:
 
-docs/phases/PHASE_30_REPRODUCIBLE_LINEAR_ARTIFACTS.md
+docs/phases/PHASE_31_OPERATIONAL_PREFLIGHT_DASHBOARD.md
 
 Completed Scope
 
-* JSON-only logistic-regression artifact training and validation
-* explicit feature contract, dataset lineage, and chronological training cutoff
+* token-protected one-shot preflight control from the dashboard
+* persisted ready/blocked feedback rendered with the existing Models-page aesthetics
 
 Explicitly Out of Scope
 
-* registry promotion, runtime worker inference, broker polling, order submission, and live trading
+* daemon lifecycle, model inference, broker polling, order submission, and live trading
 
 Roadmap Status
 
-Phase 30 is complete. Artifact creation is a research/runtime prerequisite and does not by
-itself enable inference or execution.
+Phase 31 is complete. The dashboard operates the current preflight capability only; it does
+not imply a running trading bot.

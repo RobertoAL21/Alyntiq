@@ -4,6 +4,7 @@ import type {
   Overview,
   StrategyDeployment,
   StrategyDeploymentCreateInput,
+  PaperWorkerPreflightRun,
   TradingDecision,
 } from "../types/dashboard";
 
@@ -61,13 +62,20 @@ export async function disarmStrategyDeployment(id: string, controlToken: string)
   await controlRequest(`/${id}/disarm`, "POST", controlToken);
 }
 
-async function controlRequest(
+export function runPaperWorkerPreflight(controlToken: string): Promise<PaperWorkerPreflightRun> {
+  return controlRequest<PaperWorkerPreflightRun>("/paper-worker/preflight", "POST", controlToken);
+}
+
+async function controlRequest<T = void>(
   path: string,
   method: "POST",
   controlToken: string,
   body?: object,
-): Promise<void> {
-  const response = await fetch(`/api/control/strategy-deployments${path}`, {
+): Promise<T> {
+  const endpoint = path.startsWith("/paper-worker/")
+    ? `/api/control${path}`
+    : `/api/control/strategy-deployments${path}`;
+  const response = await fetch(endpoint, {
     method,
     headers: {
       "Content-Type": "application/json",
@@ -79,4 +87,5 @@ async function controlRequest(
     const payload = (await response.json().catch(() => null)) as { detail?: string } | null;
     throw new Error(payload?.detail ?? `Deployment control request failed (${response.status})`);
   }
+  return (await response.json()) as T;
 }

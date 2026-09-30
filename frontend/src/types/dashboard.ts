@@ -99,3 +99,15 @@ export interface StrategyDeploymentCreateInput {
   order_quantity: string;
   risk_limits: RiskLimitsInput;
 }
+
+export interface PaperWorkerPreflightRun {
+  checked: number;
+  ready: number;
+  blocked: number;
+  results: Array<{
+    deployment_id: string;
+    outcome: "ready" | "blocked";
+    reason: string;
+    checked_at: string;
+  }>;
+}
